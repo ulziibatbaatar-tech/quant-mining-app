@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1C36">
+<title>Квант Майнинг — Засварын систем</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#F0F3F8;--bg2:#fff;--bg3:#E8EDF4;
+  --text:#1A2332;--text2:#5A6A7E;--text3:#99A6B5;
+  --border:#DDE3ED;--border2:#C8D0DE;
+  --blue:#1B56C8;--blue2:#1648A8;--blue-lt:#E8F0FE;
+  --red:#C92020;--red-bg:#FEE8E8;--red-tx:#8B1515;
+  --green:#047A52;--green-bg:#E6F7F1;--green-tx:#035A3C;
+  --amber:#B86200;--amber-bg:#FEF3E2;--amber-tx:#8A4900;
+  --purple:#5B21B6;--purple-bg:#EDE9FE;--purple-tx:#3B1A8A;
+  --navy:#0B1C36;--navy2:#152C50;
+  --r:6px;--rm:10px;--rl:14px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;overflow:hidden;height:100vh}
+
+/* LOGIN */
+#ls{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:2000}
+.lg{position:absolute;inset:0;opacity:.05;background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 36px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 36px)}
+.lc{background:#fff;border-radius:22px;padding:36px 32px 28px;width:340px;position:relative;z-index:1}
+.li{width:56px;height:56px;background:var(--blue);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;margin:0 auto 10px}
+.lco{font-size:16px;font-weight:700;color:var(--navy);text-align:center}
+.lcs{font-size:11.5px;color:var(--text2);text-align:center;margin-top:2px;margin-bottom:22px}
+.lcl{font-size:13px;font-weight:600;color:var(--text);text-align:center;margin-bottom:16px}
+.pds{display:flex;justify-content:center;gap:14px;margin-bottom:20px}
+.pd{width:13px;height:13px;border-radius:50%;border:2px solid var(--border2);background:transparent;transition:all .18s}
+.pd.on{background:var(--blue);border-color:var(--blue);transform:scale(1.15)}
+.pd.er{background:var(--red);border-color:var(--red)}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.pb{height:54px;border-radius:12px;border:1.5px solid var(--border);background:#fff;font-size:19px;font-weight:700;color:var(--navy);cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center}
+.pb:hover{background:var(--blue-lt);border-color:var(--blue)}
+.pb:active{transform:scale(.92);background:var(--blue);color:#fff}
+.pb.gh{border-color:transparent;background:transparent;cursor:default}
+.pem{text-align:center;color:var(--red);font-size:12px;margin-top:10px;min-height:17px;font-weight:600}
+.phi{text-align:center;color:var(--text3);font-size:11px;margin-top:12px}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.shk{animation:shake .38s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fi .22s ease}
+
+/* APP */
+#as{display:none;height:100vh;overflow:hidden}
+.al{display:flex;height:100vh}
+
+/* SIDEBAR */
+.sb{width:230px;min-width:230px;background:var(--navy);display:flex;flex-direction:column;overflow:hidden}
+.sbb{padding:15px 13px 11px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sbr{display:flex;align-items:center;gap:9px}
+.sbi{width:34px;height:34px;background:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0}
+.sbn{font-size:12.5px;font-weight:700;color:#EEF3FF;line-height:1.25}
+.sbs{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px}
+.bt{margin:10px 10px 0;background:rgba(255,255,255,.07);border-radius:8px;display:flex;padding:3px;gap:2px}
+.btb{flex:1;padding:6px 2px;border-radius:6px;font-size:10.5px;font-weight:700;border:none;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.42);background:none;text-align:center}
+.btb.on{background:var(--blue);color:#fff}
+.sbn2{flex:1;padding:9px 7px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sbn2::-webkit-scrollbar{width:2px}
+.sbn2::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.nsl{font-size:9.5px;color:rgba(255,255,255,.26);padding:9px 9px 3px;letter-spacing:.08em;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:7px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .12s}
+.ni:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.82)}
+.ni.active{background:rgba(27,86,200,.4);color:#82BCFF}
+.ni i{font-size:15px;flex-shrink:0}
+.nbg{margin-left:auto;background:#C92020;color:#fff;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:10px;min-width:17px;text-align:center}
+.sbf{padding:10px;border-top:1px solid rgba(255,255,255,.06)}
+.sbu{display:flex;align-items:center;gap:8px}
+.sbuav{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sbun{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.72)}
+.sbur{font-size:10px;color:rgba(255,255,255,.3)}
+.sblg{margin-left:auto;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.28);font-size:15px;padding:4px;border-radius:5px}
+.sblg:hover{color:rgba(255,255,255,.65);background:rgba(255,255,255,.08)}
+
+/* MAIN */
+.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.tb{background:#fff;border-bottom:1px solid var(--border);padding:0 16px;height:52px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tbt{font-size:14px;font-weight:700;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bp{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.bub{background:#DBEAFE;color:#1E3A8A}
+.bgb{background:#D1FAE5;color:#065F46}
+.ib{width:34px;height:34px;border-radius:7px;border:1px solid var(--border);background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:15px;position:relative;flex-shrink:0}
+.ib:hover{background:var(--bg3)}
+.nb{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:#EF4444;border:2px solid #fff}
+.bpri{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.bpri:hover{background:var(--blue2)}
+.ct{flex:1;overflow-y:auto;padding:14px 16px}
+.ct::-webkit-scrollbar{width:4px}
+.ct::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* STATS */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.sc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:12px 14px}
+.sl{font-size:10.5px;color:var(--text2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.sv{font-size:22px;font-weight:700;color:var(--text);line-height:1}
+.sn{font-size:10.5px;margin-top:3px}
+.cr{color:var(--red)}.cb{color:var(--blue)}.ca{color:var(--amber)}.cg{color:var(--green)}.cp{color:var(--purple)}
+
+/* TABLE */
+.tw{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:12px}
+.th{display:grid;padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.06em;text-transform:uppercase}
+.tr{display:grid;padding:10px 12px;align-items:center;border-bottom:1px solid var(--border);font-size:12.5px;cursor:pointer;transition:background .1s}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:var(--bg3)}
+.tr.dr{background:#F0FAF5}.tr.dr:hover{background:#E6F7EE}
+.tr.or{background:#FFF6F6}.tr.or:hover{background:#FEF0F0}
+.tn{font-weight:700;font-size:12px;color:var(--text)}
+.te{font-size:10.5px;color:var(--text2);margin-top:1px}
+.dr .tn{color:var(--green-tx);text-decoration:line-through;text-decoration-color:rgba(4,122,82,.4)}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
+.bc{background:var(--red-bg);color:var(--red-tx)}
+.bh{background:var(--amber-bg);color:var(--amber-tx)}
+.bm{background:var(--blue-lt);color:#1E3A8A}
+.bl{background:var(--green-bg);color:var(--green-tx)}
+.sb2{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:20px;font-size:10.5px;font-weight:700}
+.sp{background:#FEF9C3;color:#854D0E}
+.sg{background:var(--blue-lt);color:#1E3A8A}
+.sd{background:var(--green-bg);color:var(--green-tx)}
+.so{background:var(--red-bg);color:var(--red-tx)}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.act{font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;padding:3px 7px;border-radius:5px;font-weight:700}
+.act:hover{background:var(--blue-lt)}
+
+/* PANELS */
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.pn{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:12px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.pt{font-size:12.5px;font-weight:700;color:var(--text)}
+.lk{font-size:11.5px;color:var(--blue);background:none;border:none;cursor:pointer;font-weight:700}
+.er2{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.er2:last-child{border-bottom:none}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;flex-shrink:0}
+.en{font-size:12px;font-weight:700;color:var(--text)}
+.erl{font-size:10.5px;color:var(--text2)}
+.et{margin-left:auto;font-size:11px;font-weight:700;color:var(--text2)}
+.tl{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
+.tl:last-child{border-bottom:none}
+.tld{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.tlt{color:var(--text3);min-width:68px;font-size:10.5px}
+.tlm{color:var(--text2);font-size:11.5px}
+.tlb{font-weight:700;color:var(--text)}
+
+/* EQUIP */
+.eg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.eqc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:12px;cursor:pointer;transition:border-color .15s,transform .1s}
+.eqc:hover{border-color:var(--blue);transform:translateY(-1px)}
+.eqi{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:7px}
+.eqn{font-size:12.5px;font-weight:700;color:var(--text)}
+.eqid{font-size:10.5px;color:var(--text2);margin-bottom:5px}
+.eqbr{font-size:10.5px;color:var(--text3);margin-top:3px}
+
+/* TEAM */
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:12px;display:flex;gap:10px}
+.avl{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.tcn{font-size:13px;font-weight:700;color:var(--text)}
+.tcr{font-size:11px;color:var(--text2);margin:2px 0 5px}
+.tcs{font-size:10.5px;color:var(--text3);margin-bottom:6px}
+.tcst{display:flex;gap:12px}
+.tsn{font-size:16px;font-weight:700;color:var(--text)}
+.tsl{font-size:9.5px;color:var(--text2)}
+.prg{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:6px}
+.prgb{height:100%;border-radius:2px;background:var(--blue)}
+
+/* PARTS */
+.par{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border)}
+.par:last-child{border-bottom:none}
+
+/* REPORTS BAR */
+.bw{height:120px;display:flex;align-items:flex-end;gap:6px;padding:4px}
+.bc2{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar{border-radius:4px 4px 0 0;width:100%}
+
+/* DAILY */
+.dtt{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.dt{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid var(--border2);background:#fff;color:var(--text2);cursor:pointer;transition:all .12s}
+.dt.on{background:var(--blue-lt);color:var(--blue);border-color:#93C5FD}
+.dpl{position:relative;padding-left:18px}
+.dpl::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:2px;background:var(--border)}
+.dpi{position:relative;padding:0 0 12px 14px}
+.dpi:last-child{padding-bottom:0}
+.dpd{position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;border:2px solid #fff}
+.dpt{font-size:10.5px;color:var(--text3);margin-bottom:1px}
+.dpti{font-size:12.5px;font-weight:700;color:var(--text)}
+.dpds{font-size:11px;color:var(--text2);margin-top:1px}
+.dpe{font-size:10.5px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:4px}
+
+/* PARTS INVENTORY */
+.par-hdr{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr 80px;padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.06em;text-transform:uppercase}
+.par-row{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr 80px;padding:10px 12px;align-items:center;border-bottom:1px solid var(--border);font-size:12.5px;transition:background .1s}
+.par-row:last-child{border-bottom:none}
+.par-row:hover{background:var(--bg3)}
+.qty-ctrl{display:flex;align-items:center;gap:6px}
+.qty-btn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .1s}
+.qty-btn:hover{background:var(--bg3);border-color:var(--border2)}
+.qty-btn.plus:hover{background:#E6F7F1;border-color:#047A52;color:#047A52}
+.qty-btn.minus:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.qty-num{font-size:14px;font-weight:700;min-width:24px;text-align:center}
+
+/* SETTINGS */
+.stw{max-width:500px}
+.sts{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:15px;margin-bottom:10px}
+.stt{font-size:13px;font-weight:700;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.fi2{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r);font-size:12.5px;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+.fi2:focus{border-color:var(--blue)}
+.fgrp{margin-bottom:10px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.flbl{font-size:11px;color:var(--text2);margin-bottom:3px;display:block;font-weight:700}
+.bsv{display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:7px 15px;font-size:12px;font-weight:700;cursor:pointer}
+.bsv:hover{background:var(--blue2)}
+.npw{display:flex;gap:10px;margin-bottom:5px}
+.npd{width:11px;height:11px;border-radius:50%;border:2px solid var(--border2);transition:all .18s}
+.npd.on{background:var(--blue);border-color:var(--blue)}
+.mp{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:170px}
+.mpb{height:40px;border-radius:9px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:700;color:var(--navy);cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center}
+.mpb:hover{background:var(--blue-lt);border-color:var(--blue)}
+.mpb:active{transform:scale(.92);background:var(--blue);color:#fff}
+.pmsg{font-size:11.5px;color:var(--text2);min-height:16px}
+.pok{color:var(--green);font-weight:700}
+.png{color:var(--red);font-weight:700}
+
+/* FILTER */
+.fb{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.fc{padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:700;border:1px solid var(--border2);background:#fff;color:var(--text2);cursor:pointer;transition:all .12s}
+.fc.on{background:var(--blue-lt);color:var(--blue);border-color:#93C5FD}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
+.mo.op{display:flex}
+.mb{background:#fff;border-radius:16px;width:460px;max-height:90vh;overflow-y:auto;padding:18px;border:1px solid var(--border2)}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.mt2{font-size:14px;font-weight:700;color:var(--text)}
+.bgh{padding:6px 12px;border-radius:7px;border:1px solid var(--border2);background:none;font-size:12px;cursor:pointer;color:var(--text2);font-weight:700}
+.bgh:hover{background:var(--bg3)}
+
+/* NOTIF */
+.np{position:absolute;top:52px;right:10px;width:290px;background:#fff;border:1px solid var(--border2);border-radius:var(--rl);z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.12);display:none}
+.np.op{display:block}
+.nph{padding:9px 13px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--text)}
+.npi{display:flex;gap:8px;padding:9px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.npi:last-child{border-bottom:none}
+.npi:hover{background:var(--bg3)}
+.npic{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.nptt{font-size:12px;font-weight:700;color:var(--text)}
+.npds{font-size:10.5px;color:var(--text2);margin-top:1px}
+.nptm{font-size:10px;color:var(--text3);margin-top:1px}
+
+/* SEARCH */
+.srch{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rm);padding:5px 10px;flex:1;max-width:240px}
+.srch input{border:none;outline:none;font-size:12.5px;color:var(--text);background:none;width:100%}
+.srch i{color:var(--text3);font-size:13px;flex-shrink:0}
+
+/* QR modal */
+.qr-box{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0}
+.qr-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;width:140px;height:140px}
+.qr-c{border-radius:1px}
+
+/* SIGNATURE */
+#sig-canvas{border:1.5px solid var(--border);border-radius:var(--rm);cursor:crosshair;display:block;touch-action:none}
+
+/* PROGRESS RING */
+.pring{position:relative;width:44px;height:44px;flex-shrink:0}
+.pring svg{transform:rotate(-90deg)}
+.pring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:var(--text)}
+
+/* COST BADGE */
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.cost-row:last-child{border-bottom:none}
+
+/* TO ALERT */
+.to-alert{background:var(--amber-bg);border:1px solid #FDE68A;border-radius:var(--rm);padding:9px 12px;display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--amber-tx);font-weight:600}
+
+/* EMPTY */
+.empty{text-align:center;padding:36px;color:var(--text3);font-size:13px}
+.empty i{font-size:28px;display:block;margin-bottom:8px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:20px;font-size:12.5px;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div id="ls">
+  <div class="lg"></div>
+  <div class="lc fi">
+    <div class="li"><i class="ti ti-settings"></i></div>
+    <div class="lco">Квант Майнинг ХХК</div>
+    <div class="lcs">Инженерийн засварын удирдлагын систем</div>
+    <div class="lcl">ПИН кодоо оруулна уу</div>
+    <div class="pds" id="pdots">
+      <div class="pd" id="pd0"></div><div class="pd" id="pd1"></div>
+      <div class="pd" id="pd2"></div><div class="pd" id="pd3"></div>
+    </div>
+    <div class="pg">
+      <button class="pb" onclick="pi('1')">1</button><button class="pb" onclick="pi('2')">2</button><button class="pb" onclick="pi('3')">3</button>
+      <button class="pb" onclick="pi('4')">4</button><button class="pb" onclick="pi('5')">5</button><button class="pb" onclick="pi('6')">6</button>
+      <button class="pb" onclick="pi('7')">7</button><button class="pb" onclick="pi('8')">8</button><button class="pb" onclick="pi('9')">9</button>
+      <button class="pb gh"></button><button class="pb" onclick="pi('0')">0</button><button class="pb" style="font-size:16px;color:var(--text2)" onclick="pd3()"><i class="ti ti-backspace"></i></button>
+    </div>
+    <div class="pem" id="perr"></div>
+    <div class="phi">Анхны ПИН: <strong>1 2 3 4</strong></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="as">
+  <div class="al">
+    <!-- SIDEBAR -->
+    <div class="sb">
+      <div class="sbb">
+        <div class="sbr">
+          <div class="sbi"><i class="ti ti-settings"></i></div>
+          <div><div class="sbn">Квант Майнинг</div><div class="sbs">Засварын систем v3.0</div></div>
+        </div>
+        <div class="bt" style="margin-top:10px">
+          <button class="btb on" id="brUB" onclick="setBranch('UB')">Улаанбаатар</button>
+          <button class="btb" id="brBG" onclick="setBranch('BG')">Багануур</button>
+        </div>
+      </div>
+      <div class="sbn2">
+        <div class="nsl">Үндсэн</div>
+        <button class="ni active" data-p="dashboard" onclick="goP('dashboard',this)"><i class="ti ti-layout-dashboard"></i> Хяналтын самбар</button>
+        <button class="ni" data-p="daily" onclick="goP('daily',this)"><i class="ti ti-calendar-stats"></i> Өдрийн явц</button>
+        <button class="ni" data-p="tasks" onclick="goP('tasks',this)"><i class="ti ti-clipboard-list"></i> Засварын ажлууд <span class="nbg" id="nb-t">2</span></button>
+        <button class="ni" data-p="equipment" onclick="goP('equipment',this)"><i class="ti ti-engine"></i> Тоног төхөөрөмж</button>
+        <div class="nsl">Удирдлага</div>
+        <button class="ni" data-p="team" onclick="goP('team',this)"><i class="ti ti-users"></i> Инженерүүд</button>
+        <button class="ni" data-p="parts" onclick="goP('parts',this)"><i class="ti ti-package"></i> Сэлбэг хэрэгсэл <span class="nbg" id="nb-p">1</span></button>
+        <button class="ni" data-p="costs" onclick="goP('costs',this)"><i class="ti ti-cash"></i> Зардлын хяналт</button>
+        <button class="ni" data-p="reports" onclick="goP('reports',this)"><i class="ti ti-chart-bar"></i> Тайлан</button>
+        <div class="nsl">Систем</div>
+        <button class="ni" data-p="settings" onclick="goP('settings',this)"><i class="ti ti-lock"></i> ПИН & Тохиргоо</button>
+      </div>
+      <div class="sbf">
+        <div class="sbu">
+          <div class="sbuav" id="sb-av">АТ</div>
+          <div><div class="sbun" id="sb-nm">А. Тэмүүжин</div><div class="sbur" id="sb-rl">Ахлах менежер</div></div>
+          <button class="sblg" onclick="doLogout()" title="Гарах"><i class="ti ti-logout"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="mn" style="position:relative">
+      <div class="tb">
+        <span class="tbt" id="ptitle">Хяналтын самбар</span>
+        <div class="srch"><i class="ti ti-search"></i><input type="text" placeholder="Хайх..." oninput="doSearch(this.value)"></div>
+        <span class="bp bub" id="brpill"><i class="ti ti-map-pin" style="font-size:11px"></i> Улаанбаатар</span>
+        <button class="ib" onclick="toggleNotif()" title="Мэдэгдэл"><i class="ti ti-bell"></i><span class="nb" id="nb-dot" style="display:none"></span></button>
+        <button class="bpri" onclick="openAddTask()"><i class="ti ti-plus" style="font-size:13px"></i> Ажил нэмэх</button>
+      </div>
+      <div class="np" id="notif-panel">
+        <div class="nph" id="nph">Мэдэгдэлүүд</div>
+        <div id="nlist"></div>
+      </div>
+      <div class="ct fi" id="content"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mo" id="modal" onclick="cmo(event)"><div class="mb" id="mbox"></div></div>
+
+<script>
+// ========== DATA ==========
+const DEF = {
+  UB:{
+    tasks:[
+      {id:1,name:"Хөдөлгүүрийн ороомог солих",equip:"МТ-201 Хөдөлгүүр",type:"Яаралтай засвар",pri:"critical",status:"progress",eng:"Б. Батбаяр",due:"2026-05-26",site:"Налайх уурхай",pct:45,cost:850000,notes:""},
+      {id:2,name:"Генератор оношилгоо",equip:"ГН-105 Генератор",type:"Урьдчилсан үзлэг",pri:"high",status:"pending",eng:"Д. Дорж",due:"2026-05-28",site:"Улаанбаатар",pct:0,cost:0,notes:""},
+      {id:3,name:"Трансформаторын хамгаалалт",equip:"ТФ-012 Трансформатор",type:"Яаралтай засвар",pri:"critical",status:"overdue",eng:"Б. Батбаяр",due:"2026-05-22",site:"Улаанбаатар",pct:20,cost:1200000,notes:""},
+      {id:4,name:"Насосны дамжуулалт шалгах",equip:"НС-304 Насос",type:"Ерөнхий үзлэг",pri:"medium",status:"pending",eng:"Э. Эрдэнэ",due:"2026-05-30",site:"Налайх уурхай",pct:0,cost:0,notes:""},
+      {id:5,name:"Цахилгааны самбар шалгах",equip:"ЦС-440 Самбар",type:"ТО засвар",pri:"high",status:"pending",eng:"Э. Эрдэнэ",due:"2026-05-29",site:"Улаанбаатар",pct:0,cost:0,notes:""},
+      {id:6,name:"Компрессорын тос солих",equip:"КП-089 Компрессор",type:"ТО засвар",pri:"low",status:"done",eng:"М. Мөнхбат",due:"2026-05-24",site:"Налайх уурхай",pct:100,cost:320000,notes:"Амжилттай дуусгасан"},
+    ],
+    equip:[
+      {id:"МТ-201",name:"Хөдөлгүүр",brand:"Siemens",model:"1LE1503",status:"Засварт",last:"2026-05-20",next:"2026-06-20",icon:"ti-engine",ic:"#DBEAFE",it:"#1E3A8A",hours:4820,loc:"A-3 танхим"},
+      {id:"ГН-105",name:"Генератор",brand:"Caterpillar",model:"C18",status:"Ажиллаж байна",last:"2026-04-15",next:"2026-05-28",icon:"ti-bolt",ic:"#D1FAE5",it:"#065F46",hours:12300,loc:"Гадна байр"},
+      {id:"НС-304",name:"Насос",brand:"Grundfos",model:"NK 80-250",status:"Ажиллаж байна",last:"2026-05-01",next:"2026-05-30",icon:"ti-droplet",ic:"#EDE9FE",it:"#4C1D95",hours:6700,loc:"B-2 танхим"},
+      {id:"ТФ-012",name:"Трансформатор",brand:"ABB",model:"TM 630",status:"Хоцорсон",last:"2026-05-10",next:"2026-05-22",icon:"ti-bolt",ic:"#FEE2E2",it:"#991B1B",hours:28000,loc:"Цахилгааны өрөө"},
+      {id:"КП-089",name:"Компрессор",brand:"Atlas Copco",model:"GA 45",status:"Ажиллаж байна",last:"2026-05-24",next:"2026-06-24",icon:"ti-wind",ic:"#FEF3C7",it:"#92400E",hours:9100,loc:"C-1 танхим"},
+      {id:"ЦС-440",name:"Цахилгааны самбар",brand:"Schneider",model:"Prisma G",status:"Ажиллаж байна",last:"2026-05-18",next:"2026-06-01",icon:"ti-plug",ic:"#D1FAE5",it:"#065F46",hours:0,loc:"Дистрибьюцийн өрөө"},
+    ],
+    engineers:[
+      {id:"BB",name:"Б. Батбаяр",role:"Ахлах инженер",spec:"Цахилгаан хөдөлгүүр",phone:"9911-2233",tasks:3,done:14,av:"#DBEAFE",at:"#1E3A8A"},
+      {id:"DD",name:"Д. Дорж",role:"Цахилгааны инженер",spec:"Генератор, трансформатор",phone:"9922-3344",tasks:2,done:9,av:"#D1FAE5",at:"#065F46"},
+      {id:"EE",name:"Э. Эрдэнэ",role:"Механик инженер",spec:"Насос, самбар",phone:"9933-4455",tasks:2,done:16,av:"#FEF3C7",at:"#92400E"},
+      {id:"MM",name:"М. Мөнхбат",role:"ТО инженер",spec:"Ерөнхий ТО",phone:"9944-5566",tasks:1,done:21,av:"#FEE2E2",at:"#991B1B"},
+    ],
+    parts:[
+      {id:"p1",name:"Цахилгааны ороомог",code:"ОР-2200V",qty:4,unit:"ш",min:2,price:180000,status:"ok",equip:"Хөдөлгүүр"},
+      {id:"p2",name:"Подшипник SKF 6310",code:"ПД-SKF6310",qty:12,unit:"ш",min:4,price:45000,status:"ok",equip:"Хөдөлгүүр"},
+      {id:"p3",name:"Тос Shell Tellus 46",code:"ТС-SH46",qty:200,unit:"л",min:50,price:3500,status:"ok",equip:"Компрессор"},
+      {id:"p4",name:"Уян хоолой DN50",code:"УХ-DN50",qty:0,unit:"м",min:5,price:28000,status:"out",equip:"Насос"},
+      {id:"p5",name:"Контактор 160A",code:"КТ-160A",qty:6,unit:"ш",min:2,price:95000,status:"ok",equip:"Генератор"},
+      {id:"p6",name:"Хамгаалах реле",code:"РЛ-ОВЗ",qty:2,unit:"ш",min:2,price:62000,status:"low",equip:"Трансформатор"},
+    ],
+    monthly:[18,21,15,24,22,23],
+    costs:[320000,850000,0,0,0,1200000],
+    daily:{
+      "2026-05-25":[
+        {time:"08:30",title:"Өдрийн хурал",desc:"Засварын ажлуудын төлөвлөгөөний хурал",eng:"Б. Батбаяр",color:"#3B82F6",status:"done"},
+        {time:"09:15",title:"Компрессорын тос солих — дууссан",desc:"КП-089 тос амжилттай солигдлоо",eng:"М. Мөнхбат",color:"#10B981",status:"done"},
+        {time:"10:00",title:"Ороомог солих — эхэлсэн",desc:"МТ-201 хөдөлгүүрийн ороомог солих ажил эхэллээ",eng:"Б. Батбаяр",color:"#F59E0B",status:"progress"},
+        {time:"11:30",title:"Трансформатор хоцорсон!",desc:"ТФ-012 засвар хоцорч байна, яаралтай",eng:"Б. Батбаяр",color:"#EF4444",status:"overdue"},
+        {time:"14:00",title:"Генератор үзлэгт хуваарилагдсан",desc:"ГН-105 оношилгоо хуваарилагдлаа",eng:"Д. Дорж",color:"#8B5CF6",status:"pending"},
+      ],
+      "2026-05-24":[
+        {time:"09:00",title:"Компрессор ТО эхэлсэн",desc:"КП-089 ТО ажил эхэлсэн",eng:"М. Мөнхбат",color:"#F59E0B",status:"progress"},
+        {time:"11:00",title:"Сэлбэг материал ирсэн",desc:"Подшипник, ороомог агуулахад ирлээ",eng:"М. Мөнхбат",color:"#3B82F6",status:"done"},
+        {time:"15:30",title:"Компрессор ТО дууссан",desc:"Тос солих, шалгалт бүгд дуусаж актлагдлаа",eng:"М. Мөнхбат",color:"#10B981",status:"done"},
+      ],
+      "2026-05-23":[
+        {time:"08:00",title:"Насосны шалгалт",desc:"НС-304 насосны дамжуулалт шалгах ажил",eng:"Э. Эрдэнэ",color:"#F59E0B",status:"progress"},
+        {time:"14:00",title:"Насос шалгалт дууссан",desc:"Бүх заалт хэвийн",eng:"Э. Эрдэнэ",color:"#10B981",status:"done"},
+      ]
+    },
+    notifications:[
+      {icon:"ti-alert-triangle",ic:"#FEE2E2",it:"#991B1B",title:"Трансформатор хоцорсон!",desc:"ТФ-012 засвар 3 хоног хоцорсон",time:"10 мин өмнө"},
+      {icon:"ti-bolt",ic:"#FEF3C7",it:"#92400E",title:"Генератор ТО ойртож байна",desc:"ГН-105 ТО 3 хоногийн дараа",time:"1 цаг өмнө"},
+      {icon:"ti-package",ic:"#DBEAFE",it:"#1E3A8A",title:"Уян хоолой дуссан",desc:"УХ-DN50 нөөц дуссан",time:"өчигдөр"},
+    ]
+  },
+  BG:{
+    tasks:[
+      {id:8,name:"Уурхайн насосны шалгалт",equip:"НС-501 Насос",type:"Ерөнхий үзлэг",pri:"high",status:"progress",eng:"С. Сүхбат",due:"2026-05-27",site:"Багануур уурхай",pct:60,cost:540000,notes:""},
+      {id:9,name:"Генераторын эд анги солих",equip:"ГН-301 Генератор",type:"Яаралтай засвар",pri:"critical",status:"overdue",eng:"О. Оюунбаяр",due:"2026-05-21",site:"Багануур",pct:30,cost:1500000,notes:""},
+      {id:10,name:"Конвейерийн редуктор үзлэг",equip:"КВ-110 Конвейер",type:"Урьдчилсан үзлэг",pri:"medium",status:"pending",eng:"Г. Гантулга",due:"2026-05-31",site:"Багануур уурхай",pct:0,cost:0,notes:""},
+      {id:11,name:"Аюулгүй байдлын шалгалт",equip:"АШ-001",type:"Ерөнхий үзлэг",pri:"high",status:"pending",eng:"С. Сүхбат",due:"2026-05-29",site:"Багануур",pct:0,cost:0,notes:""},
+      {id:12,name:"Компрессор шалгалт",equip:"КП-202 Компрессор",type:"ТО засвар",pri:"low",status:"done",eng:"О. Оюунбаяр",due:"2026-05-23",site:"Багануур",pct:100,cost:290000,notes:"Амжилттай"},
+      {id:13,name:"Хөдөлгүүр дахин засвар",equip:"МТ-405 Хөдөлгүүр",type:"Их засвар",pri:"critical",status:"progress",eng:"Г. Гантулга",due:"2026-05-30",site:"Багануур уурхай",pct:70,cost:2100000,notes:""},
+    ],
+    equip:[
+      {id:"НС-501",name:"Уурхайн насос",brand:"Warman",model:"6/4 E-AH",status:"Засварт",last:"2026-05-20",next:"2026-06-15",icon:"ti-droplet",ic:"#EDE9FE",it:"#4C1D95",hours:8200,loc:"Уурхайн суваг"},
+      {id:"ГН-301",name:"Генератор",brand:"Cummins",model:"QSK60",status:"Хоцорсон",last:"2026-04-20",next:"2026-05-21",icon:"ti-bolt",ic:"#FEE2E2",it:"#991B1B",hours:18400,loc:"Гадна станц"},
+      {id:"КВ-110",name:"Конвейер",brand:"FLSmidth",model:"BC-110",status:"Ажиллаж байна",last:"2026-05-05",next:"2026-05-31",icon:"ti-arrows-right",ic:"#D1FAE5",it:"#065F46",hours:22000,loc:"Тээвэрлэлтийн шугам"},
+      {id:"МТ-405",name:"Хөдөлгүүр",brand:"ABB",model:"M3BP 355",status:"Засварт",last:"2026-05-18",next:"2026-06-18",icon:"ti-engine",ic:"#DBEAFE",it:"#1E3A8A",hours:14600,loc:"D-1 танхим"},
+      {id:"КП-202",name:"Компрессор",brand:"Kaeser",model:"BSD 72",status:"Ажиллаж байна",last:"2026-05-23",next:"2026-06-23",icon:"ti-wind",ic:"#FEF3C7",it:"#92400E",hours:7300,loc:"E-2 танхим"},
+      {id:"АШ-001",name:"Аюулгүй систем",brand:"Honeywell",model:"HS-200",status:"Ажиллаж байна",last:"2026-05-15",next:"2026-05-29",icon:"ti-shield",ic:"#D1FAE5",it:"#065F46",hours:0,loc:"Хяналтын өрөө"},
+    ],
+    engineers:[
+      {id:"SS",name:"С. Сүхбат",role:"Ахлах инженер",spec:"Насос, уурхайн тоног",phone:"9955-6677",tasks:2,done:11,av:"#DBEAFE",at:"#1E3A8A"},
+      {id:"OO",name:"О. Оюунбаяр",role:"Цахилгааны инженер",spec:"Генератор, хөдөлгүүр",phone:"9966-7788",tasks:2,done:7,av:"#FEE2E2",at:"#991B1B"},
+      {id:"GG",name:"Г. Гантулга",role:"Механик инженер",spec:"Конвейер, редуктор",phone:"9977-8899",tasks:2,done:13,av:"#D1FAE5",at:"#065F46"},
+    ],
+    parts:[
+      {id:"q1",name:"Насосны лага хавтас",code:"НЛ-WRM50",qty:3,unit:"ш",min:2,price:95000,status:"ok",equip:"Насос"},
+      {id:"q2",name:"Генераторын зүлгүүр",code:"ГЗ-C301",qty:0,unit:"ш",min:3,price:78000,status:"out",equip:"Генератор"},
+      {id:"q3",name:"Конвейерийн бүс",code:"КБ-110B",qty:8,unit:"м",min:5,price:42000,status:"ok",equip:"Конвейер"},
+      {id:"q4",name:"Подшипник FAG 6312",code:"ПД-FAG312",qty:6,unit:"ш",min:4,price:52000,status:"ok",equip:"Хөдөлгүүр"},
+      {id:"q5",name:"Гидравлик тос ISO 68",code:"ТС-ISO68",qty:50,unit:"л",min:30,price:4200,status:"low",equip:"Конвейер"},
+    ],
+    monthly:[12,14,11,17,15,16],
+    costs:[290000,540000,0,0,1500000,2100000],
+    daily:{
+      "2026-05-25":[
+        {time:"08:00",title:"Өдрийн товлол",desc:"Багануур салбарын өдрийн ажлын хурал",eng:"С. Сүхбат",color:"#3B82F6",status:"done"},
+        {time:"09:30",title:"Компрессор шалгалт — дууссан",desc:"КП-202 шалгалт дуусаж хэвийн",eng:"О. Оюунбаяр",color:"#10B981",status:"done"},
+        {time:"10:30",title:"Генератор засвар — хоцорсон",desc:"ГН-301 яаралтай засвар хоцорч байна",eng:"О. Оюунбаяр",color:"#EF4444",status:"overdue"},
+        {time:"13:00",title:"Хөдөлгүүр дахин засвар 70%",desc:"МТ-405 их засвар явагдаж байна",eng:"Г. Гантулга",color:"#F59E0B",status:"progress"},
+      ],
+      "2026-05-24":[
+        {time:"09:00",title:"Компрессор ТО эхэлсэн",desc:"КП-202 ТО ажил",eng:"О. Оюунбаяр",color:"#F59E0B",status:"progress"},
+        {time:"16:00",title:"Компрессор ТО дууссан",desc:"Амжилттай дуусгасан",eng:"О. Оюунбаяр",color:"#10B981",status:"done"},
+      ]
+    },
+    notifications:[
+      {icon:"ti-alert-triangle",ic:"#FEE2E2",it:"#991B1B",title:"Генератор яаралтай!",desc:"ГН-301 засвар 4 хоног хоцорсон",time:"30 мин өмнө"},
+      {icon:"ti-package",ic:"#FEE2E2",it:"#991B1B",title:"Генераторын зүлгүүр дуссан",desc:"ГЗ-C301 яаралтай захиалах шаардлагатай",time:"2 цаг өмнө"},
+    ]
+  }
+};
+
+// ========== STATE ==========
+let DB = JSON.parse(localStorage.getItem('qm_db') || 'null') || JSON.parse(JSON.stringify(DEF));
+let curPin = localStorage.getItem('qm_pin') || '1234';
+let curBranch = 'UB', curPage = 'dashboard', curFilter = 'all', curDayIdx = 0;
+let pinBuf = '', notifOpen = false;
+let newP1 = '', newP2 = '', pStep = 1;
+const DAYS = ['2026-05-25','2026-05-24','2026-05-23'];
+const DLBLS = ['Өнөөдөр (5/25)','Өчигдөр (5/24)','2 өдрийн өмнө (5/23)'];
+
+function save(){ localStorage.setItem('qm_db', JSON.stringify(DB)); localStorage.setItem('qm_pin', curPin); }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+function d(){ return DB[curBranch]; }
+
+// ========== PIN LOGIN ==========
+function pi(v){
+  if(pinBuf.length>=4) return;
+  pinBuf+=v; upDots(false);
+  if(pinBuf.length===4){
+    setTimeout(()=>{
+      if(pinBuf===curPin){
+        document.getElementById('ls').style.display='none';
+        document.getElementById('as').style.display='block';
+        pinBuf=''; upDots(false);
+        updBadges(); rPage(curPage);
+      } else {
+        document.getElementById('perr').textContent='ПИН код буруу байна!';
+        for(let i=0;i<4;i++){let e=document.getElementById('pd'+i);e.classList.remove('on');e.classList.add('er');}
+        document.getElementById('pdots').classList.add('shk');
+        setTimeout(()=>{pinBuf='';upDots(false);document.getElementById('perr').textContent='';document.getElementById('pdots').classList.remove('shk');},650);
+      }
+    },80);
+  }
+}
+function pd3(){ if(pinBuf.length>0){pinBuf=pinBuf.slice(0,-1);upDots(false);document.getElementById('perr').textContent='';} }
+function upDots(e){ for(let i=0;i<4;i++){let el=document.getElementById('pd'+i);el.classList.remove('on','er');if(i<pinBuf.length)el.classList.add(e?'er':'on');} }
+function doLogout(){ document.getElementById('as').style.display='none'; document.getElementById('ls').style.display='flex'; pinBuf=''; upDots(false); }
+
+// ========== BRANCH ==========
+function setBranch(b){
+  curBranch=b;
+  document.getElementById('brUB').classList.toggle('on',b==='UB');
+  document.getElementById('brBG').classList.toggle('on',b==='BG');
+  const pill=document.getElementById('brpill');
+  if(b==='UB'){pill.className='bp bub';pill.innerHTML='<i class="ti ti-map-pin" style="font-size:11px"></i> Улаанбаатар';}
+  else{pill.className='bp bgb';pill.innerHTML='<i class="ti ti-map-pin" style="font-size:11px"></i> Багануур';}
+  updBadges(); rPage(curPage);
+}
+
+function updBadges(){
+  const d2=d();
+  const urg=d2.tasks.filter(t=>t.status==='overdue'||t.pri==='critical').length;
+  document.getElementById('nb-t').textContent=urg;
+  const lp=d2.parts.filter(p=>p.status!=='ok').length;
+  document.getElementById('nb-p').textContent=lp;
+  document.getElementById('nb-dot').style.display=d2.notifications.length>0?'block':'none';
+}
+
+// ========== NAV ==========
+function goP(page,el){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else { const b=document.querySelector(`.ni[data-p="${page}"]`); if(b) b.classList.add('active'); }
+  const titles={dashboard:'Хяналтын самбар',daily:'Өдрийн ажлын явц',tasks:'Засварын ажлууд',equipment:'Тоног төхөөрөмж',team:'Инженерүүд',parts:'Сэлбэг хэрэгсэл',costs:'Зардлын хяналт',reports:'Тайлан',settings:'ПИН & Тохиргоо'};
+  document.getElementById('ptitle').textContent=titles[page]||page;
+  curPage=page;
+  document.getElementById('notif-panel').classList.remove('op'); notifOpen=false;
+  rPage(page);
+}
+function rPage(p){
+  const c=document.getElementById('content');
+  c.classList.remove('fi'); void c.offsetWidth; c.classList.add('fi');
+  const d2=d();
+  if(p==='dashboard') rDash(c,d2);
+  else if(p==='daily') rDaily(c,d2);
+  else if(p==='tasks') rTasks(c,d2,curFilter);
+  else if(p==='equipment') rEquip(c,d2);
+  else if(p==='team') rTeam(c,d2);
+  else if(p==='parts') rParts(c,d2);
+  else if(p==='costs') rCosts(c,d2);
+  else if(p==='reports') rReports(c,d2);
+  else if(p==='settings') rSettings(c);
+}
+
+// ========== HELPERS ==========
+const PL={critical:'Яаралтай',high:'Өндөр',medium:'Дунд',low:'Бага'};
+const PC={critical:'bc',high:'bh',medium:'bm',low:'bl'};
+const SL={pending:'Хүлээж байна',progress:'Явагдаж байна',done:'Дууссан',overdue:'Хоцорсон'};
+const SC={pending:'sp',progress:'sg',done:'sd',overdue:'so'};
+const EQS={'Ажиллаж байна':'sd','Засварт':'sg','Хоцорсон':'so'};
+
+function fmt(n){ return n>=1000000?(n/1000000).toFixed(1)+'сая':n>=1000?(n/1000).toFixed(0)+'мянга':String(n); }
+function fmtFull(n){ return n.toLocaleString()+'₮'; }
+
+function tRow(t){
+  const rc='tr'+(t.status==='done'?' dr':t.status==='overdue'?' or':'');
+  return`<div class="${rc}" style="grid-template-columns:1.8fr .9fr 1fr 1fr .9fr 70px" onclick="openTaskDetail(${t.id})">
+    <div><div class="tn">${t.name}</div><div class="te">${t.equip} · ${t.site}</div></div>
+    <div><span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span></div>
+    <div><span class="sb2 ${SC[t.status]}"><span class="dot"></span>${SL[t.status]}</span></div>
+    <div style="font-size:11.5px">${t.eng}</div>
+    <div style="font-size:11px;color:var(--text2)">${t.due}</div>
+    <div><button class="act" onclick="event.stopPropagation();openTaskDetail(${t.id})">Харах</button></div>
+  </div>`;
+}
+function tTable(list){
+  if(!list.length) return`<div class="empty"><i class="ti ti-mood-empty"></i>Ажил олдсонгүй</div>`;
+  return`<div class="tw">
+    <div class="th" style="grid-template-columns:1.8fr .9fr 1fr 1fr .9fr 70px">
+      <div>Ажлын нэр</div><div>Ач холбогдол</div><div>Төлөв</div><div>Инженер</div><div>Дуусах</div><div></div>
+    </div>
+    ${list.map(tRow).join('')}
+  </div>`;
+}
+
+// ===== TO ALERT CHECK =====
+function toAlerts(equip){
+  const today=new Date('2026-05-25');
+  return equip.filter(e=>{
+    const nd=new Date(e.next);
+    const diff=Math.ceil((nd-today)/(1000*60*60*24));
+    return diff<=7 && e.status!=='Хоцорсон';
+  });
+}
+
+// ========== DASHBOARD ==========
+function rDash(c,d2){
+  const crit=d2.tasks.filter(t=>t.pri==='critical').length;
+  const over=d2.tasks.filter(t=>t.status==='overdue').length;
+  const prog=d2.tasks.filter(t=>t.status==='progress').length;
+  const done=d2.tasks.filter(t=>t.status==='done').length;
+  const alerts=toAlerts(d2.equip);
+  const totalCost=d2.costs.reduce((a,b)=>a+b,0);
+  c.innerHTML=`
+  ${alerts.length>0?`<div class="to-alert"><i class="ti ti-alarm" style="font-size:16px;flex-shrink:0"></i><span>Анхааруулга: <strong>${alerts.map(e=>e.name+' ('+e.id+')').join(', ')}</strong> — 7 хоногийн дотор ТО хийх шаардлагатай!</span></div>`:''}
+  <div class="sr">
+    <div class="sc"><div class="sl"><i class="ti ti-clipboard-list" style="font-size:12px"></i>Нийт ажил</div><div class="sv">${d2.tasks.length}</div><div class="sn cg">↑ Энэ долоо хоног</div></div>
+    <div class="sc"><div class="sl"><i class="ti ti-alert-triangle" style="font-size:12px"></i>Яаралтай</div><div class="sv cr">${crit}</div><div class="sn cr">Шууд анхаарах</div></div>
+    <div class="sc"><div class="sl"><i class="ti ti-loader" style="font-size:12px"></i>Явагдаж байна</div><div class="sv cb">${prog}</div><div class="sn cg">Хэвийн явц</div></div>
+    <div class="sc"><div class="sl"><i class="ti ti-cash" style="font-size:12px"></i>Нийт зардал</div><div class="sv ca">${fmt(totalCost)}</div><div class="sn ca">Энэ сар</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <span style="font-size:13px;font-weight:700;color:var(--text)">Сүүлийн засварын ажлууд</span>
+    <button class="act" onclick="goP('tasks',null)">Бүгдийг харах →</button>
+  </div>
+  ${tTable(d2.tasks.slice(0,5))}
+  <div class="r2">
+    <div class="pn">
+      <div class="ph"><span class="pt"><i class="ti ti-users" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Инженерүүд</span><button class="lk" onclick="goP('team',null)">Бүгдийг харах →</button></div>
+      ${d2.engineers.map(e=>`<div class="er2"><div class="av" style="background:${e.av};color:${e.at}">${e.name.charAt(0)}</div><div><div class="en">${e.name}</div><div class="erl">${e.role}</div></div><div class="et">${e.tasks} ажил</div></div>`).join('')}
+    </div>
+    <div class="pn">
+      <div class="ph"><span class="pt"><i class="ti ti-calendar-event" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Өнөөдрийн үйл явдал</span><button class="lk" onclick="goP('daily',null)">Бүгдийг харах →</button></div>
+      ${(d2.daily[DAYS[0]]||[]).slice(0,4).map(a=>`<div class="tl"><div class="tld" style="background:${a.color}"></div><div class="tlt">${a.time}</div><div class="tlm"><span class="tlb">${a.title}</span></div></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ========== DAILY ==========
+function rDaily(c,d2){
+  const day=DAYS[curDayIdx]||DAYS[0];
+  const evs=(d2.daily[day]||[]);
+  const total=evs.length, done=evs.filter(e=>e.status==='done').length;
+  const pct=total>0?Math.round(done/total*100):0;
+  c.innerHTML=`
+  <div class="sr">
+    <div class="sc"><div class="sl">Нийт үйл явдал</div><div class="sv">${total}</div></div>
+    <div class="sc"><div class="sl">Дууссан</div><div class="sv cg">${done}</div></div>
+    <div class="sc"><div class="sl">Явагдаж байна</div><div class="sv cb">${evs.filter(e=>e.status==='progress').length}</div></div>
+    <div class="sc"><div class="sl">Гүйцэтгэл</div><div class="sv">${pct}%</div><div style="margin-top:6px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--green);border-radius:2px"></div></div></div>
+  </div>
+  <div class="dtt">${DLBLS.map((l,i)=>`<button class="dt${i===curDayIdx?' on':''}" onclick="setDay(${i})">${l}</button>`).join('')}</div>
+  ${evs.length===0?`<div class="empty"><i class="ti ti-calendar-off"></i>Энэ өдрийн мэдээлэл байхгүй</div>`:`
+  <div class="tw">
+    <div class="dpl" style="padding:13px 13px 6px 26px">
+      ${evs.map(ev=>{const dc=ev.status==='done'?'#10B981':ev.status==='overdue'?'#EF4444':ev.status==='progress'?'#3B82F6':'#94A3B8';
+      return`<div class="dpi"><div class="dpd" style="background:${dc}"></div>
+        <div class="dpt">${ev.time}</div>
+        <div class="dpti">${ev.title}</div>
+        <div class="dpds">${ev.desc}</div>
+        <div class="dpe"><i class="ti ti-user" style="font-size:11px"></i>${ev.eng} · <span class="sb2 ${SC[ev.status]||'sp'}" style="font-size:10px;padding:1px 6px"><span class="dot"></span>${SL[ev.status]||ev.status}</span></div>
+      </div>`;}).join('')}
+    </div>
+  </div>`}`;
+}
+function setDay(i){ curDayIdx=i; rPage('daily'); }
+
+// ========== TASKS ==========
+function rTasks(c,d2,filter){
+  curFilter=filter;
+  const fs=[{k:'all',l:'Бүгд'},{k:'progress',l:'Явагдаж байна'},{k:'pending',l:'Хүлээж байна'},{k:'overdue',l:'Хоцорсон'},{k:'done',l:'Дууссан'}];
+  const list=filter==='all'?d2.tasks:d2.tasks.filter(t=>t.status===filter);
+  c.innerHTML=`<div class="fb">${fs.map(f=>`<button class="fc${filter===f.k?' on':''}" onclick="setFilt('${f.k}')">${f.l}</button>`).join('')}</div>${tTable(list)}`;
+}
+function setFilt(f){ curFilter=f; rPage('tasks'); }
+
+// ========== EQUIPMENT ==========
+function rEquip(c,d2){
+  const alerts=toAlerts(d2.equip);
+  c.innerHTML=`
+  ${alerts.length>0?`<div class="to-alert"><i class="ti ti-alarm" style="font-size:16px;flex-shrink:0"></i><span><strong>${alerts.length} тоног</strong> 7 хоногийн дотор ТО хийх шаардлагатай</span></div>`:''}
+  <div class="eg">${d2.equip.map(e=>{
+    const nd=new Date(e.next);const today=new Date('2026-05-25');const diff=Math.ceil((nd-today)/(1000*60*60*24));
+    const warn=diff<=7&&diff>=0;
+    return`<div class="eqc" onclick="openEqDetail('${e.id}')" style="${warn?'border-color:#FDE68A':''}">
+      <div class="eqi" style="background:${e.ic};color:${e.it}"><i class="ti ${e.icon}"></i></div>
+      <div class="eqn">${e.name}</div><div class="eqid">${e.id} · ${e.brand}</div>
+      <span class="sb2 ${EQS[e.status]}"><span class="dot"></span>${e.status}</span>
+      ${warn?`<div style="font-size:10px;color:var(--amber);font-weight:700;margin-top:4px"><i class="ti ti-alarm" style="font-size:11px"></i> ТО ${diff}хон дотор!</div>`:''}
+      <div style="font-size:10.5px;color:var(--text3);margin-top:5px">Дараагийн ТО: ${e.next}</div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="act" style="flex:1;text-align:center;border:1px solid var(--border);border-radius:6px;padding:4px 0" onclick="event.stopPropagation();openQR('${e.id}')"><i class="ti ti-qrcode" style="font-size:12px"></i> QR</button>
+        <button class="act" style="flex:1;text-align:center;border:1px solid var(--border);border-radius:6px;padding:4px 0" onclick="event.stopPropagation();openEqDetail('${e.id}')"><i class="ti ti-info-circle" style="font-size:12px"></i> Дэлгэрэнгүй</button>
+      </div>
+    </div>`;}).join('')}
+  </div>`;
+}
+
+// ========== TEAM ==========
+function rTeam(c,d2){
+  c.innerHTML=`
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <span style="font-size:13px;font-weight:700;color:var(--text)">Инженерүүд (${d2.engineers.length})</span>
+    <button class="bpri" onclick="openEmpEdit()"><i class="ti ti-edit" style="font-size:12px"></i> Нэр засах</button>
+  </div>
+  <div class="tg">${d2.engineers.map(e=>`<div class="tc">
+    <div class="avl" style="background:${e.av};color:${e.at}">${e.name.charAt(0)}</div>
+    <div style="flex:1">
+      <div class="tcn">${e.name}</div>
+      <div class="tcr">${e.role}</div>
+      <div class="tcs"><i class="ti ti-tool" style="font-size:11px;vertical-align:-1px"></i> ${e.spec}</div>
+      <div style="font-size:10.5px;color:var(--text3);margin-bottom:6px"><i class="ti ti-phone" style="font-size:11px;vertical-align:-1px"></i> ${e.phone}</div>
+      <div class="tcst">
+        <div><div class="tsn">${e.tasks}</div><div class="tsl">Идэвхтэй</div></div>
+        <div><div class="tsn cg">${e.done}</div><div class="tsl">Дууссан</div></div>
+      </div>
+      <div class="prg"><div class="prgb" style="width:${Math.round(e.done/(e.done+e.tasks)*100)}%"></div></div>
+    </div>
+  </div>`).join('')}</div>`;
+}
+
+// ========== PARTS (Inventory) ==========
+function rParts(c,d2){
+  const low=d2.parts.filter(p=>p.status!=='ok').length;
+  c.innerHTML=`
+  ${low>0?`<div class="to-alert"><i class="ti ti-package" style="font-size:16px;flex-shrink:0"></i><span><strong>${low} сэлбэг</strong> нөөц дутагдалтай байна. Захиалга өгөх шаардлагатай.</span></div>`:''}
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <span style="font-size:13px;font-weight:700;color:var(--text)">Агуулахын нөөц</span>
+    <button class="bpri" onclick="openAddPart()"><i class="ti ti-plus" style="font-size:12px"></i> Сэлбэг нэмэх</button>
+  </div>
+  <div class="tw">
+    <div class="par-hdr"><div>Сэлбэгийн нэр</div><div>Код</div><div>Тоо хэмжээ</div><div>Байдал</div><div>Үйлдэл</div></div>
+    ${d2.parts.map(p=>{
+      const pst=p.status==='ok'?'sd':p.status==='low'?'sp':'so';
+      const psl=p.status==='ok'?'Хангалттай':p.status==='low'?'Бага нөөц':'Дуссан';
+      const warn=p.qty<=p.min;
+      return`<div class="par-row" style="${warn?'background:#FFFBF0':''}">
+        <div><div style="font-weight:700;font-size:12px;color:var(--text)">${p.name}</div><div style="font-size:10.5px;color:var(--text3)">${p.equip} · ${fmtFull(p.price)}/${p.unit}</div></div>
+        <div style="font-family:monospace;font-size:11px;color:var(--text2)">${p.code}</div>
+        <div class="qty-ctrl">
+          <button class="qty-btn minus" onclick="adjQty('${p.id}',-1)"><i class="ti ti-minus" style="font-size:12px"></i></button>
+          <span class="qty-num" id="qty-${p.id}" style="color:${p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amber)':'var(--text)'}">${p.qty}</span>
+          <button class="qty-btn plus" onclick="adjQty('${p.id}',1)"><i class="ti ti-plus" style="font-size:12px"></i></button>
+          <span style="font-size:10.5px;color:var(--text3)">${p.unit}</span>
+        </div>
+        <div><span class="sb2 ${pst}"><span class="dot"></span>${psl}</span></div>
+        <div><button class="act" onclick="openPartDetail('${p.id}')">Дэлгэрэнгүй</button></div>
+      </div>`;}).join('')}
+  </div>
+  <div style="margin-top:10px;font-size:11.5px;color:var(--text2);background:var(--bg3);border-radius:var(--rm);padding:9px 12px">
+    <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:5px"></i>
+    Нийт үнэлгээ: <strong>${fmtFull(d2.parts.reduce((s,p)=>s+p.qty*p.price,0))}</strong> · Хамгийн бага нөөц хүрсэн: <strong>${d2.parts.filter(p=>p.qty<=p.min).length} нэр</strong>
+  </div>`;
+}
+
+function adjQty(pid, delta){
+  const d2=d();
+  const p=d2.parts.find(x=>x.id===pid);
+  if(!p) return;
+  p.qty=Math.max(0, p.qty+delta);
+  p.status=p.qty===0?'out':p.qty<=p.min?'low':'ok';
+  save();
+  const el=document.getElementById('qty-'+pid);
+  if(el){
+    el.textContent=p.qty;
+    el.style.color=p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amber)':'var(--text)';
+  }
+  updBadges();
+  toast(delta>0?`${p.name} +1 нэмэгдлээ (${p.qty} ${p.unit})`:`${p.name} -1 бууллаа (${p.qty} ${p.unit})`);
+}
+
+// ========== COSTS ==========
+function rCosts(c,d2){
+  const months=['1-р','2-р','3-р','4-р','5-р','6-р'];
+  const total=d2.costs.reduce((a,b)=>a+b,0);
+  const maxC=Math.max(...d2.costs,1);
+  c.innerHTML=`
+  <div class="sr">
+    <div class="sc"><div class="sl">Нийт зардал</div><div class="sv ca">${fmt(total)}</div><div class="sn">Энэ жил</div></div>
+    <div class="sc"><div class="sl">Сарын дундаж</div><div class="sv">${fmt(Math.round(total/6))}</div></div>
+    <div class="sc"><div class="sl">Хамгийн их сар</div><div class="sv cr">${months[d2.costs.indexOf(Math.max(...d2.costs))]}</div><div class="sn cr">${fmt(Math.max(...d2.costs))}</div></div>
+    <div class="sc"><div class="sl">Ажлын зардал</div><div class="sv">${d2.tasks.filter(t=>t.cost>0).length} ажил</div><div class="sn cg">Зардал бүртгэлтэй</div></div>
+  </div>
+  <div class="r2">
+    <div class="pn">
+      <div class="ph"><span class="pt">Сарын зардлын график</span></div>
+      <div class="bw">${d2.costs.map((v,i)=>`<div class="bc2">
+        <div style="font-size:10px;font-weight:700;color:var(--text)">${v>0?fmt(v):''}</div>
+        <div class="bar" style="height:${v>0?Math.round(v/maxC*90)+10:4}px;background:${i===5?'var(--blue)':'var(--blue-lt)'};border:1px solid ${i===5?'var(--blue2)':'#BFDBFE'}"></div>
+        <div style="font-size:10px;color:var(--text2)">${months[i]}</div>
+      </div>`).join('')}</div>
+    </div>
+    <div class="pn">
+      <div class="ph"><span class="pt">Ажлын зардал</span><button class="lk" onclick="openAddCost()">+ Зардал нэмэх</button></div>
+      ${d2.tasks.filter(t=>t.cost>0).map(t=>`<div class="cost-row">
+        <div><div style="font-size:12px;font-weight:700">${t.name}</div><div style="font-size:10.5px;color:var(--text2)">${t.eng} · ${t.due}</div></div>
+        <div style="font-size:13px;font-weight:700;color:var(--amber);white-space:nowrap">${fmtFull(t.cost)}</div>
+      </div>`).join('')}
+      ${d2.tasks.filter(t=>t.cost>0).length===0?`<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Зардал бүртгэгдээгүй</div>`:''}
+    </div>
+  </div>`;
+}
+
+// ========== REPORTS ==========
+function rReports(c,d2){
+  const months=['1-р','2-р','3-р','4-р','5-р','6-р'];
+  const maxV=Math.max(...d2.monthly);
+  const done=d2.tasks.filter(t=>t.status==='done').length;
+  const typeCounts=[
+    {t:'Яаралтай засвар',c:d2.tasks.filter(t=>t.type&&t.type.includes('Яаралтай')).length,cl:'#EF4444'},
+    {t:'Урьдчилсан үзлэг',c:d2.tasks.filter(t=>t.type&&t.type.includes('Урьдчилсан')).length,cl:'#3B82F6'},
+    {t:'ТО засвар',c:d2.tasks.filter(t=>t.type&&t.type.includes('ТО')).length,cl:'#10B981'},
+    {t:'Ерөнхий үзлэг',c:d2.tasks.filter(t=>t.type&&t.type.includes('Ерөнхий')).length,cl:'#F59E0B'},
+    {t:'Их засвар',c:d2.tasks.filter(t=>t.type&&t.type.includes('Их')).length,cl:'#8B5CF6'},
+  ].filter(x=>x.c>0);
+  c.innerHTML=`
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px">
+    <button class="bpri" onclick="exportPDF()"><i class="ti ti-file-export" style="font-size:12px"></i> PDF татах</button>
+  </div>
+  <div class="sr">
+    <div class="sc"><div class="sl">Дууссан ажил</div><div class="sv cg">${done}</div></div>
+    <div class="sc"><div class="sl">Цаг хугацаандаа</div><div class="sv">${Math.round(done/d2.tasks.length*100)}%</div></div>
+    <div class="sc"><div class="sl">Инженерийн тоо</div><div class="sv">${d2.engineers.length}</div></div>
+    <div class="sc"><div class="sl">Сэлбэг дутагдал</div><div class="sv ca">${d2.parts.filter(p=>p.status!=='ok').length}</div></div>
+  </div>
+  <div class="r2">
+    <div class="pn">
+      <div class="ph"><span class="pt">Сарын гүйцэтгэл</span></div>
+      <div class="bw">${d2.monthly.map((v,i)=>`<div class="bc2">
+        <div style="font-size:10px;font-weight:700;color:var(--text)">${v}</div>
+        <div class="bar" style="height:${Math.round(v/maxV*90)+10}px;background:${i===5?'var(--blue)':'var(--blue-lt)'};border:1px solid ${i===5?'var(--blue2)':'#BFDBFE'}"></div>
+        <div style="font-size:10px;color:var(--text2)">${months[i]}</div>
+      </div>`).join('')}</div>
+    </div>
+    <div class="pn">
+      <div class="ph"><span class="pt">Ажлын төрлөөр</span></div>
+      ${typeCounts.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+        <div style="width:9px;height:9px;border-radius:50%;background:${t.cl};flex-shrink:0"></div>
+        <div style="flex:1;font-size:12.5px">${t.t}</div>
+        <div style="font-size:13px;font-weight:700">${t.c}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div class="r2">
+    <div class="pn">
+      <div class="ph"><span class="pt">Инженерийн гүйцэтгэл</span></div>
+      ${d2.engineers.map(e=>{const tot=e.done+e.tasks,pct=Math.round(e.done/tot*100);
+      return`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+        <div class="av" style="background:${e.av};color:${e.at};width:26px;height:26px;font-size:10px">${e.name.charAt(0)}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:2px"><span>${e.name}</span><span class="cg">${pct}%</span></div>
+          <div class="prg"><div class="prgb" style="width:${pct}%"></div></div>
+        </div>
+      </div>`;}).join('')}
+    </div>
+    <div class="pn">
+      <div class="ph"><span class="pt">Тоног төхөөрөмжийн байдал</span></div>
+      ${[{l:'Ажиллаж байна',v:d2.equip.filter(e=>e.status==='Ажиллаж байна').length,c:'var(--green)'},
+         {l:'Засварт',v:d2.equip.filter(e=>e.status==='Засварт').length,c:'var(--blue)'},
+         {l:'Хоцорсон',v:d2.equip.filter(e=>e.status==='Хоцорсон').length,c:'var(--red)'}].map(s=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="width:9px;height:9px;border-radius:50%;background:${s.c};flex-shrink:0"></div>
+          <div style="flex:1;font-size:12.5px">${s.l}</div>
+          <div style="font-size:20px;font-weight:700;color:${s.c}">${s.v}</div>
+        </div>`).join('')}
+      <div style="padding-top:9px;font-size:11px;color:var(--text3)">Нийт тоног: ${d2.equip.length} ширхэг</div>
+    </div>
+  </div>`;
+}
+
+function exportPDF(){
+  toast('PDF экспорт хийгдэж байна...');
+  setTimeout(()=>{ window.print(); },300);
+}
+
+// ========== SETTINGS ==========
+function rSettings(c){
+  pStep=1; newP1=''; newP2='';
+  c.innerHTML=`<div class="stw">
+    <div class="sts">
+      <div class="stt"><i class="ti ti-lock" style="font-size:14px"></i>ПИН код солих</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Шинэ 4 оронтой ПИН код тохируулна уу.</p>
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+        <div>
+          <div class="npw" id="npw"><div class="npd" id="np0"></div><div class="npd" id="np1"></div><div class="npd" id="np2"></div><div class="npd" id="np3"></div></div>
+          <div class="pmsg" id="pmsg" style="margin-bottom:8px">Шинэ ПИН оруулна уу</div>
+          <div class="mp">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(n=>`<button class="mpb" ${n===''?'style="visibility:hidden"':''} onclick="${n==='⌫'?'nPD()':n===''?'':'nPI(\''+n+'\')'}">${n==='⌫'?'<i class="ti ti-backspace"></i>':n}</button>`).join('')}</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:var(--rm);padding:12px;font-size:11.5px;color:var(--text2);max-width:180px;margin-top:24px">
+          <div style="font-weight:700;color:var(--text);margin-bottom:5px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-1px"></i> Заавар</div>
+          <div>1. Шинэ ПИН оруулна</div><div style="margin-top:3px">2. Дахин баталгаажуулна</div><div style="margin-top:3px">3. Таарвал хадгалагдана</div>
+        </div>
+      </div>
+    </div>
+    <div class="sts">
+      <div class="stt"><i class="ti ti-user" style="font-size:14px"></i>Хэрэглэгчийн мэдээлэл</div>
+      <div class="frow">
+        <div class="fgrp"><label class="flbl">Овог нэр</label><input class="fi2" id="s-nm" value="${document.getElementById('sb-nm').textContent}"></div>
+        <div class="fgrp"><label class="flbl">Гар утас</label><input class="fi2" value="+976 9900-0000"></div>
+      </div>
+      <div class="frow">
+        <div class="fgrp"><label class="flbl">Албан тушаал</label><input class="fi2" id="s-rl" value="${document.getElementById('sb-rl').textContent}"></div>
+        <div class="fgrp"><label class="flbl">И-мэйл</label><input class="fi2" value="manager@quantmining.mn"></div>
+      </div>
+      <button class="bsv" onclick="saveProfile()"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+    </div>
+    <div class="sts">
+      <div class="stt"><i class="ti ti-trash" style="font-size:14px;color:var(--red)"></i><span style="color:var(--red)">Өгөгдөл устгах</span></div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Бүх нэмэлт өгөгдлийг устгаж анхны хувилбарт буцаана.</p>
+      <button style="display:inline-flex;align-items:center;gap:5px;background:var(--red-bg);color:var(--red-tx);border:1px solid var(--red);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer" onclick="resetDB()"><i class="ti ti-refresh" style="font-size:12px"></i> Өгөгдөл шинэчлэх</button>
+    </div>
+  </div>`;
+}
+function nPI(v){
+  if(pStep===1){if(newP1.length>=4)return;newP1+=v;updNP(newP1);if(newP1.length===4){setTimeout(()=>{pStep=2;newP2='';updNP('');const m=document.getElementById('pmsg');if(m)m.textContent='Баталгаажуулан дахин оруулна уу';},180);}}
+  else{if(newP2.length>=4)return;newP2+=v;updNP(newP2);if(newP2.length===4){setTimeout(()=>{const m=document.getElementById('pmsg');
+    if(newP1===newP2){curPin=newP1;save();if(m)m.innerHTML='<span class="pok"><i class="ti ti-check"></i> ПИН амжилттай солигдлоо!</span>';newP1='';newP2='';pStep=1;setTimeout(()=>updNP(''),400);toast('ПИН код солигдлоо!');}
+    else{if(m)m.innerHTML='<span class="png"><i class="ti ti-x"></i> ПИН таарсангүй. Дахин оролдоно уу.</span>';newP1='';newP2='';pStep=1;updNP('');}
+  },180);}}
+}
+function nPD(){if(pStep===1&&newP1.length>0){newP1=newP1.slice(0,-1);updNP(newP1);}else if(pStep===2&&newP2.length>0){newP2=newP2.slice(0,-1);updNP(newP2);}}
+function updNP(p){for(let i=0;i<4;i++){const el=document.getElementById('np'+i);if(el)el.classList.toggle('on',i<p.length);}}
+function saveProfile(){
+  const n=document.getElementById('s-nm'),r=document.getElementById('s-rl');
+  if(n&&r){document.getElementById('sb-nm').textContent=n.value;document.getElementById('sb-rl').textContent=r.value;const av=n.value.split(' ').map(x=>x.charAt(0)).join('').substring(0,2).toUpperCase();document.getElementById('sb-av').textContent=av||'АТ';}
+  const btn=event.target; btn.innerHTML='<i class="ti ti-check"></i> Хадгалагдлаа!'; btn.style.background='var(--green)';
+  setTimeout(()=>{btn.innerHTML='<i class="ti ti-check"></i> Хадгалах';btn.style.background='';},2000);
+  toast('Мэдээлэл хадгалагдлаа!');
+}
+function resetDB(){
+  if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){
+    localStorage.removeItem('qm_db');
+    DB=JSON.parse(JSON.stringify(DEF));
+    toast('Өгөгдөл шинэчлэгдлээ');
+    updBadges(); rPage(curPage);
+  }
+}
+
+// ========== MODALS ==========
+function openModal(html){ document.getElementById('mbox').innerHTML=html; document.getElementById('modal').classList.add('op'); }
+function cmo(e){ if(e.target===document.getElementById('modal')) closeModal(); }
+function closeModal(){ document.getElementById('modal').classList.remove('op'); }
+
+function openAddTask(){
+  const d2=d();
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Шинэ засварын ажил</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px;background:${curBranch==='UB'?'#DBEAFE':'#D1FAE5'};color:${curBranch==='UB'?'#1E3A8A':'#065F46'}"><i class="ti ti-map-pin" style="font-size:11px"></i> ${curBranch==='UB'?'Улаанбаатар':'Багануур'} салбар</div>
+  <div class="fgrp"><label class="flbl">Ажлын нэр *</label><input class="fi2" id="at-nm" placeholder="Засварын ажлын нэр"></div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Тоног төхөөрөмж</label><select class="fi2" id="at-eq">${d2.equip.map(e=>`<option value="${e.id}">${e.name} (${e.id})</option>`).join('')}</select></div>
+    <div class="fgrp"><label class="flbl">Ач холбогдол</label><select class="fi2" id="at-pr"><option value="critical">🔴 Яаралтай</option><option value="high">🟡 Өндөр</option><option value="medium" selected>🔵 Дунд</option><option value="low">🟢 Бага</option></select></div>
+  </div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Хариуцсан инженер</label><select class="fi2" id="at-en">${d2.engineers.map(e=>`<option value="${e.name}">${e.name}</option>`).join('')}</select></div>
+    <div class="fgrp"><label class="flbl">Дуусах огноо</label><input type="date" class="fi2" id="at-due" value="2026-06-01"></div>
+  </div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Засварын төрөл</label><select class="fi2" id="at-tp"><option>Ерөнхий үзлэг</option><option>Урьдчилсан үзлэг</option><option>ТО засвар</option><option>Яаралтай засвар</option><option>Их засвар</option></select></div>
+    <div class="fgrp"><label class="flbl">Зардал (₮)</label><input type="number" class="fi2" id="at-cs" placeholder="0"></div>
+  </div>
+  <div class="fgrp"><label class="flbl">Тэмдэглэл</label><textarea class="fi2" id="at-nt" rows="2" placeholder="Дэлгэрэнгүй тэмдэглэл..." style="resize:none"></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bgh" onclick="closeModal()">Болих</button>
+    <button class="bpri" onclick="saveAddTask()"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+  </div>`);
+}
+function saveAddTask(){
+  const nm=document.getElementById('at-nm').value.trim();
+  if(!nm){alert('Ажлын нэр оруулна уу!');return;}
+  const d2=d();
+  const newId=Date.now();
+  const eqSel=document.getElementById('at-eq').value;
+  const eqObj=d2.equip.find(e=>e.id===eqSel);
+  d2.tasks.push({id:newId,name:nm,equip:eqObj?(eqObj.name+' ('+eqObj.id+')'):eqSel,type:document.getElementById('at-tp').value,pri:document.getElementById('at-pr').value,status:'pending',eng:document.getElementById('at-en').value,due:document.getElementById('at-due').value,site:curBranch==='UB'?'Улаанбаатар':'Багануур',pct:0,cost:parseInt(document.getElementById('at-cs').value)||0,notes:document.getElementById('at-nt').value});
+  save(); updBadges(); closeModal(); rPage(curPage);
+  toast('Шинэ ажил нэмэгдлээ!');
+}
+
+function openTaskDetail(id){
+  const all=[...DB.UB.tasks,...DB.BG.tasks];
+  const t=all.find(x=>x.id===id);if(!t)return;
+  const d2=d();
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-clipboard-text" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Ажлын дэлгэрэнгүй</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">${t.name}</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+    <span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span>
+    <span class="sb2 ${SC[t.status]}"><span class="dot"></span>${SL[t.status]}</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12.5px;margin-bottom:12px">
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Тоног төхөөрөмж</div><div style="font-weight:700">${t.equip}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Инженер</div><div style="font-weight:700">${t.eng}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Байршил</div><div style="font-weight:700">${t.site}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Дуусах огноо</div><div style="font-weight:700">${t.due}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Засварын төрөл</div><div style="font-weight:700">${t.type}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Зардал</div><div style="font-weight:700 ca">${t.cost>0?fmtFull(t.cost):'Бүртгэгдээгүй'}</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Гүйцэтгэл — <strong>${t.pct}%</strong></div>
+    <input type="range" min="0" max="100" value="${t.pct}" id="pct-sl" oninput="document.getElementById('pct-lbl').textContent=this.value+'%'" style="width:100%">
+    <div style="font-size:11px;color:var(--text2);margin-top:3px">Гүйцэтгэл: <strong id="pct-lbl">${t.pct}%</strong></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <label style="font-size:10px;color:var(--text3);margin-bottom:3px;display:block">Төлөв өөрчлөх</label>
+    <select class="fi2" id="st-sel" style="max-width:240px">
+      <option value="pending" ${t.status==='pending'?'selected':''}>Хүлээж байна</option>
+      <option value="progress" ${t.status==='progress'?'selected':''}>Явагдаж байна</option>
+      <option value="done" ${t.status==='done'?'selected':''}>Дууссан</option>
+      <option value="overdue" ${t.status==='overdue'?'selected':''}>Хоцорсон</option>
+    </select>
+  </div>
+  ${t.notes?`<div style="font-size:11.5px;color:var(--text2);background:var(--bg3);border-radius:var(--rm);padding:8px 10px;margin-bottom:10px">${t.notes}</div>`:''}
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deleteTask(${t.id})"><i class="ti ti-trash" style="font-size:12px"></i> Устгах</button>
+    <button class="bgh" onclick="closeModal()">Хаах</button>
+    <button class="bpri" onclick="saveTaskEdit(${t.id})"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+  </div>`);
+}
+function saveTaskEdit(id){
+  const all=[...DB.UB.tasks,...DB.BG.tasks];
+  const t=all.find(x=>x.id===id);if(!t)return;
+  t.pct=parseInt(document.getElementById('pct-sl').value);
+  t.status=document.getElementById('st-sel').value;
+  if(t.pct===100) t.status='done';
+  save(); updBadges(); closeModal(); rPage(curPage);
+  toast('Ажлын мэдээлэл хадгалагдлаа!');
+}
+function deleteTask(id){
+  if(!confirm('Энэ ажлыг устгах уу?')) return;
+  DB.UB.tasks=DB.UB.tasks.filter(t=>t.id!==id);
+  DB.BG.tasks=DB.BG.tasks.filter(t=>t.id!==id);
+  save(); updBadges(); closeModal(); rPage(curPage);
+  toast('Ажил устгагдлаа');
+}
+
+function openAddPart(){
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Шинэ сэлбэг нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div class="fgrp"><label class="flbl">Сэлбэгийн нэр *</label><input class="fi2" id="ap-nm" placeholder="Сэлбэгийн нэр"></div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Код</label><input class="fi2" id="ap-cd" placeholder="СЛ-00001"></div>
+    <div class="fgrp"><label class="flbl">Тоног төхөөрөмж</label><input class="fi2" id="ap-eq" placeholder="Хөдөлгүүр"></div>
+  </div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Тоо хэмжээ</label><input type="number" class="fi2" id="ap-qt" value="1" min="0"></div>
+    <div class="fgrp"><label class="flbl">Хэмжих нэгж</label><select class="fi2" id="ap-un"><option>ш</option><option>л</option><option>м</option><option>кг</option><option>компл</option></select></div>
+  </div>
+  <div class="frow">
+    <div class="fgrp"><label class="flbl">Нэгж үнэ (₮)</label><input type="number" class="fi2" id="ap-pr" value="0"></div>
+    <div class="fgrp"><label class="flbl">Доод нөөц</label><input type="number" class="fi2" id="ap-mn" value="2" min="0"></div>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bgh" onclick="closeModal()">Болих</button>
+    <button class="bpri" onclick="saveAddPart()"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+  </div>`);
+}
+function saveAddPart(){
+  const nm=document.getElementById('ap-nm').value.trim();
+  if(!nm){alert('Нэр оруулна уу!');return;}
+  const d2=d();
+  const qty=parseInt(document.getElementById('ap-qt').value)||0;
+  const mn=parseInt(document.getElementById('ap-mn').value)||2;
+  d2.parts.push({id:'new-'+Date.now(),name:nm,code:document.getElementById('ap-cd').value||'—',qty:qty,unit:document.getElementById('ap-un').value,min:mn,price:parseInt(document.getElementById('ap-pr').value)||0,status:qty===0?'out':qty<=mn?'low':'ok',equip:document.getElementById('ap-eq').value||'—'});
+  save(); updBadges(); closeModal(); rPage(curPage);
+  toast('Сэлбэг нэмэгдлээ!');
+}
+
+function openPartDetail(pid){
+  const d2=d();
+  const p=d2.parts.find(x=>x.id===pid);if(!p)return;
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-package" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>${p.name}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12.5px;margin-bottom:14px">
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Код</div><div style="font-weight:700;font-family:monospace">${p.code}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Тоног төхөөрөмж</div><div style="font-weight:700">${p.equip}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Одоогийн нөөц</div><div style="font-size:18px;font-weight:700;color:${p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amber)':'var(--green)'}">${p.qty} ${p.unit}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Нэгж үнэ</div><div style="font-weight:700">${fmtFull(p.price)}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Доод нөөц</div><div style="font-weight:700">${p.min} ${p.unit}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Нийт үнэлгээ</div><div style="font-weight:700">${fmtFull(p.qty*p.price)}</div></div>
+  </div>
+  <div style="margin-bottom:12px">
+    <label style="font-size:10px;color:var(--text3);margin-bottom:4px;display:block">Тоо хэмжээ шинэчлэх</label>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="qty-btn minus" style="width:36px;height:36px" onclick="adjQty('${p.id}',-1);document.getElementById('det-qty').textContent=DB['${curBranch}'].parts.find(x=>x.id==='${p.id}').qty"><i class="ti ti-minus"></i></button>
+      <span id="det-qty" style="font-size:20px;font-weight:700;min-width:40px;text-align:center">${p.qty}</span>
+      <button class="qty-btn plus" style="width:36px;height:36px" onclick="adjQty('${p.id}',1);document.getElementById('det-qty').textContent=DB['${curBranch}'].parts.find(x=>x.id==='${p.id}').qty"><i class="ti ti-plus"></i></button>
+      <span style="font-size:12px;color:var(--text2)">${p.unit}</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deletePart('${p.id}')"><i class="ti ti-trash" style="font-size:12px"></i> Устгах</button>
+    <button class="bgh" onclick="closeModal()">Хаах</button>
+  </div>`);
+}
+function deletePart(pid){
+  if(!confirm('Энэ сэлбэгийг устгах уу?'))return;
+  const d2=d();d2.parts=d2.parts.filter(p=>p.id!==pid);
+  save();updBadges();closeModal();rPage(curPage);toast('Сэлбэг устгагдлаа');
+}
+
+function openAddCost(){
+  const d2=d();
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-cash" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Зардал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div class="fgrp"><label class="flbl">Ажил сонгох</label><select class="fi2" id="ac-task">${d2.tasks.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></div>
+  <div class="fgrp"><label class="flbl">Зардлын дүн (₮)</label><input type="number" class="fi2" id="ac-amt" placeholder="0"></div>
+  <div class="fgrp"><label class="flbl">Зардлын тайлбар</label><input class="fi2" id="ac-desc" placeholder="Сэлбэг, хөдөлмөр гэх мэт"></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bgh" onclick="closeModal()">Болих</button>
+    <button class="bpri" onclick="saveAddCost()"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+  </div>`);
+}
+function saveAddCost(){
+  const tid=parseInt(document.getElementById('ac-task').value);
+  const amt=parseInt(document.getElementById('ac-amt').value)||0;
+  const d2=d();
+  const t=d2.tasks.find(x=>x.id===tid);
+  if(t){t.cost+=amt;save();closeModal();rPage(curPage);toast('Зардал нэмэгдлээ: '+fmtFull(amt));}
+}
+
+function openEmpEdit(){
+  const d2=d();
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-users" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Инженерийн нэр засах</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  ${d2.engineers.map((e,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+    <div class="av" style="background:${e.av};color:${e.at};width:30px;height:30px">${e.name.charAt(0)}</div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <input class="fi2" id="en-nm-${i}" value="${e.name}" placeholder="Нэр">
+      <input class="fi2" id="en-ph-${i}" value="${e.phone}" placeholder="Утас">
+      <input class="fi2" id="en-sp-${i}" value="${e.spec}" placeholder="Мэргэшил" style="grid-column:span 2">
+    </div>
+  </div>`).join('')}
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border);margin-top:6px">
+    <button class="bgh" onclick="closeModal()">Болих</button>
+    <button class="bpri" onclick="saveEmps()"><i class="ti ti-check" style="font-size:12px"></i> Хадгалах</button>
+  </div>`);
+}
+function saveEmps(){
+  const d2=d();
+  d2.engineers.forEach((e,i)=>{
+    const n=document.getElementById('en-nm-'+i),p=document.getElementById('en-ph-'+i),s=document.getElementById('en-sp-'+i);
+    if(n)e.name=n.value;if(p)e.phone=p.value;if(s)e.spec=s.value;
+  });
+  save();closeModal();rPage(curPage);toast('Инженерийн мэдээлэл хадгалагдлаа!');
+}
+
+function openEqDetail(eid){
+  const d2=d();
+  const e=d2.equip.find(x=>x.id===eid);if(!e)return;
+  const relTasks=d2.tasks.filter(t=>t.equip.includes(eid));
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ${e.icon}" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>${e.name} — ${e.id}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12.5px;margin-bottom:13px">
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Үйлдвэрлэгч / Загвар</div><div style="font-weight:700">${e.brand} ${e.model}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Байршил</div><div style="font-weight:700">${e.loc}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Байдал</div><div><span class="sb2 ${EQS[e.status]}"><span class="dot"></span>${e.status}</span></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Ажилласан цаг</div><div style="font-weight:700">${e.hours.toLocaleString()} цаг</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Сүүлийн ТО</div><div style="font-weight:700">${e.last}</div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px">Дараагийн ТО</div><div style="font-weight:700">${e.next}</div></div>
+  </div>
+  ${relTasks.length>0?`<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:7px">Холбоотой ажлууд (${relTasks.length})</div>
+  ${relTasks.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+    <span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span>
+    <span style="flex:1">${t.name}</span>
+    <span class="sb2 ${SC[t.status]}" style="font-size:10px"><span class="dot"></span>${SL[t.status]}</span>
+  </div>`).join('')}`:''}
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border);margin-top:8px">
+    <button class="bgh" onclick="closeModal();openQR('${e.id}')">QR код харах</button>
+    <button class="bpri" onclick="closeModal()">Хаах</button>
+  </div>`);
+}
+
+function openQR(eid){
+  const d2=d(); const e=d2.equip.find(x=>x.id===eid);if(!e)return;
+  // Generate simple QR-like pattern for display
+  const seed=eid.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  let cells='';
+  for(let r=0;r<21;r++){for(let cl2=0;cl2<21;cl2++){
+    const corner=(r<3&&cl2<3)||(r<3&&cl2>17)||(r>17&&cl2<3);
+    const edge=(r<=3&&cl2<=3)||(r<=3&&cl2>=17)||(r>=17&&cl2<=3);
+    const on=corner||(Math.sin(seed+r*7+cl2*13)*100%2>0);
+    cells+=`<div style="width:6px;height:6px;background:${on?'#1A2332':'#fff'};border-radius:${corner?'1px':'0'}"></div>`;
+  }}
+  openModal(`<div class="mh"><span class="mt2"><i class="ti ti-qrcode" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>QR код — ${e.name}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+  <div style="text-align:center;padding:10px 0">
+    <div style="display:inline-grid;grid-template-columns:repeat(21,6px);gap:1px;background:#fff;padding:12px;border:2px solid var(--border);border-radius:var(--rm);margin-bottom:12px">${cells}</div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">${e.name} — ${e.id}</div>
+    <div style="font-size:11.5px;color:var(--text2)">${e.brand} ${e.model} · ${e.loc}</div>
+    <div style="margin-top:12px;font-size:11.5px;color:var(--text2);background:var(--bg3);border-radius:var(--rm);padding:8px">Энэ QR кодыг скан хийснээр тоног төхөөрөмжийн бүрэн мэдээлэл харагдана</div>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border)">
+    <button class="bpri" onclick="window.print()"><i class="ti ti-printer" style="font-size:12px"></i> Хэвлэх</button>
+    <button class="bgh" onclick="closeModal()">Хаах</button>
+  </div>`);
+}
+
+// ========== NOTIFICATIONS ==========
+function toggleNotif(){
+  notifOpen=!notifOpen;
+  const panel=document.getElementById('notif-panel');
+  panel.classList.toggle('op',notifOpen);
+  if(notifOpen){
+    const d2=d();
+    document.getElementById('nph').textContent=`Мэдэгдэлүүд (${d2.notifications.length})`;
+    document.getElementById('nlist').innerHTML=d2.notifications.map(n=>`
+      <div class="npi"><div class="npic" style="background:${n.ic};color:${n.it}"><i class="ti ${n.icon}"></i></div>
+      <div><div class="nptt">${n.title}</div><div class="npds">${n.desc}</div><div class="nptm">${n.time}</div></div></div>`).join('')
+      ||`<div style="padding:18px;text-align:center;color:var(--text3);font-size:12px">Мэдэгдэл байхгүй</div>`;
+  }
+}
+
+// ========== SEARCH ==========
+function doSearch(q){
+  if(!q.trim()){rPage(curPage);return;}
+  const d2=d();
+  const ql=q.toLowerCase();
+  const found=d2.tasks.filter(t=>t.name.toLowerCase().includes(ql)||t.equip.toLowerCase().includes(ql)||t.eng.toLowerCase().includes(ql)||t.site.toLowerCase().includes(ql));
+  const c=document.getElementById('content');
+  c.classList.remove('fi');void c.offsetWidth;c.classList.add('fi');
+  c.innerHTML=`<div style="margin-bottom:8px;font-size:12.5px;color:var(--text2)"><i class="ti ti-search" style="font-size:13px;vertical-align:-1px"></i> "${q}" — ${found.length} үр дүн</div>${tTable(found)}`;
+}
+
+// ========== INIT ==========
+updBadges();
+rPage('dashboard');
+</script>
+</body>
+</html>
