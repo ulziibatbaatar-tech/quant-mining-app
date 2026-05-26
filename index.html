@@ -25,7 +25,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* LOGIN */
 #ls{position:fixed;inset:0;background:var(--nvy);display:flex;align-items:center;justify-content:center;z-index:2000}
 .lgrid{position:absolute;inset:0;opacity:.05;pointer-events:none;background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 36px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 36px)}
-.lcard{background:#fff;border-radius:22px;padding:36px 32px 28px;width:340px;position:relative;z-index:1}
+.lcard{background:#fff;border-radius:22px;padding:36px 32px 28px;width:340px;position:relative;z-index:1;color:#1A2332}
 .lico{width:56px;height:56px;background:var(--blue);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;margin:0 auto 10px}
 .lco{font-size:16px;font-weight:700;color:var(--nvy);text-align:center}
 .lcs{font-size:11.5px;color:var(--tx2);text-align:center;margin-top:2px;margin-bottom:22px}
@@ -35,9 +35,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pdot.on{background:var(--blue);border-color:var(--blue);transform:scale(1.15)}
 .pdot.er{background:var(--red);border-color:var(--red)}
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.pb{height:54px;border-radius:12px;border:1.5px solid var(--bdr);background:#fff;font-size:19px;font-weight:700;color:var(--nvy);cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center}
-.pb:hover{background:var(--blt);border-color:var(--blue)}.pb:active{transform:scale(.92);background:var(--blue);color:#fff}
-.pb.gh{border-color:transparent;background:transparent;cursor:default}
+.pb{height:54px;border-radius:12px;border:1.5px solid #C8D0DE!important;background:#F0F4FF!important;font-size:22px!important;font-weight:700!important;color:#0B1C36!important;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;-webkit-appearance:none;appearance:none}
+.pb:hover{background:#E8F0FE;border-color:#1B56C8;color:#1B56C8}.pb:active{transform:scale(.92);background:#1B56C8;color:#fff;border-color:#1B56C8}
+.pb.gh{border-color:transparent!important;background:transparent!important;cursor:default;pointer-events:none}
 .pem{text-align:center;color:var(--red);font-size:12px;margin-top:10px;min-height:17px;font-weight:600}
 .phi{text-align:center;color:var(--tx3);font-size:11px;margin-top:12px}
 @keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
@@ -314,6 +314,117 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .admin-err{color:#F87171;font-size:12px;text-align:center;min-height:16px;margin-top:8px;font-weight:600}
 
 @media print{.sdb,.topbar,.mo,.toast,.npanel{display:none!important}.mn{overflow:visible!important}.ct{overflow:visible!important;height:auto!important}body,#as,.alayout{height:auto!important;overflow:visible!important}}
+
+/* ======== MOBILE RESPONSIVE ======== */
+.mob-top{display:none}
+.mob-bottom{display:none}
+.mob-drawer{position:fixed;left:-250px;top:0;bottom:0;width:250px;background:var(--nvy);z-index:400;transition:left .25s ease;display:flex;flex-direction:column;overflow:hidden}
+.mob-drawer.open{left:0}
+.mob-overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:399}
+.mob-overlay-bg.open{display:block}
+.mob-more-panel{position:fixed;bottom:60px;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);z-index:201;box-shadow:0 -4px 20px rgba(0,0,0,.1);display:none;padding:6px 0 8px;max-height:65vh;overflow-y:auto}
+.mob-more-panel.open{display:block}
+.mob-more-item{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:13.5px;color:var(--txt);cursor:pointer;border:none;background:none;width:100%;text-align:left;-webkit-tap-highlight-color:transparent}
+.mob-more-item:active{background:var(--bg3)}
+.mob-more-item i{font-size:19px;color:var(--tx2);width:22px;flex-shrink:0}
+.mob-more-item.act-item{color:var(--blue)}
+.mob-more-item.act-item i{color:var(--blue)}
+.mob-more-item.danger{color:var(--red)}
+.mob-more-item.danger i{color:var(--red)}
+.mob-sep{height:1px;background:var(--bdr);margin:4px 0}
+
+@media (max-width:768px){
+  body{overflow:hidden;height:100dvh}
+  #as{height:100dvh;overflow:hidden}
+  .alayout{flex-direction:column;height:100dvh}
+  /* hide desktop sidebar */
+  .sdb{display:none!important}
+  /* hide desktop topbar */
+  .topbar{display:none!important}
+  /* mobile top bar */
+  .mob-top{
+    display:flex;align-items:center;
+    background:var(--nvy);height:52px;padding:0 12px;gap:9px;flex-shrink:0;
+  }
+  .mob-ham{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+  .mob-ham:active{background:rgba(255,255,255,.2)}
+  .mob-pg-title{flex:1;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mob-add{width:34px;height:34px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+  .mob-add:active{background:var(--bl2)}
+  /* main content fills remaining */
+  .mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .ct{flex:1;overflow-y:auto;padding:10px 10px 70px}
+  /* bottom nav */
+  .mob-bottom{
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-top:1.5px solid var(--bdr);
+    height:58px;z-index:200;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .mob-nav-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;border:none;background:none;cursor:pointer;
+    color:var(--tx3);font-size:9px;font-weight:700;padding:5px 2px;
+    -webkit-tap-highlight-color:transparent;transition:color .12s;position:relative;
+  }
+  .mob-nav-btn:active{opacity:.7}
+  .mob-nav-btn.active{color:var(--blue)}
+  .mob-nav-btn i{font-size:21px}
+  .mob-nav-badge{
+    position:absolute;top:4px;right:calc(50% - 18px);
+    background:var(--red);color:#fff;font-size:8px;font-weight:700;
+    padding:1px 4px;border-radius:9px;min-width:14px;text-align:center;line-height:1.4;
+    display:none;
+  }
+  /* layout fixes */
+  .srow{grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .r2{grid-template-columns:1fr!important}
+  .kpi-grid{grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .egrid{grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .tg{grid-template-columns:1fr!important}
+  .frow{grid-template-columns:1fr!important}
+  /* table: show only key columns */
+  .thd,.trow{grid-template-columns:1.6fr .9fr .95fr 60px!important}
+  .thd>div:nth-child(4),.trow>div:nth-child(4),
+  .thd>div:nth-child(5),.trow>div:nth-child(5),
+  .thd>div:nth-child(6),.trow>div:nth-child(6){display:none!important}
+  /* parts table */
+  .par-hdr{grid-template-columns:1.5fr 1.2fr 90px!important}
+  .par-row{grid-template-columns:1.5fr 1.2fr 90px!important}
+  .par-hdr>div:nth-child(2),.par-row>div:nth-child(2),
+  .par-hdr>div:nth-child(4),.par-row>div:nth-child(4){display:none!important}
+  /* modal: slide up from bottom */
+  .mo{align-items:flex-end!important}
+  .mbox{width:100%!important;max-width:100%!important;border-radius:18px 18px 0 0!important;max-height:88vh!important}
+  /* stat values smaller */
+  .sval{font-size:18px!important}
+  .scard{padding:9px 11px!important}
+  /* chat */
+  .chat-wrap{height:calc(100dvh - 200px)!important}
+  /* notif panel */
+  .npanel{left:0!important;right:0!important;width:auto!important;top:52px!important;border-radius:0!important;max-height:70vh;overflow-y:auto}
+  /* landing cards */
+  .lcard{width:100%!important;max-width:360px!important;padding:28px 22px 24px!important}
+  /* mob-drawer content = same as sdb */
+  .mob-drawer .sbrand{padding:14px 12px 10px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .mob-drawer .sbrand-row{display:flex;align-items:center;gap:9px}
+  .mob-drawer .sbnav{flex:1;padding:8px 6px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+  .mob-drawer .nsl{font-size:9px;color:rgba(255,255,255,.26);padding:8px 9px 2px;letter-spacing:.08em;text-transform:uppercase}
+  .mob-drawer .ni{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.55);cursor:pointer;border:none;background:none;width:100%;text-align:left;-webkit-tap-highlight-color:transparent}
+  .mob-drawer .ni:active{background:rgba(255,255,255,.08)}
+  .mob-drawer .ni.active{background:rgba(27,86,200,.4);color:#82BCFF}
+  .mob-drawer .ni i{font-size:17px;flex-shrink:0}
+  .mob-drawer .sbfoot{padding:10px;border-top:1px solid rgba(255,255,255,.06)}
+  .mob-drawer .sbun{font-size:12px;font-weight:700;color:rgba(255,255,255,.75)}
+  .mob-drawer .sbur{font-size:10px;color:rgba(255,255,255,.35)}
+}
+@media (max-width:380px){
+  .srow{grid-template-columns:1fr 1fr!important;gap:5px!important}
+  .sval{font-size:16px!important}
+  .mob-nav-btn i{font-size:19px}
+  .mob-nav-btn{font-size:8px}
+}
+
 </style>
 </head>
 <body>
@@ -374,10 +485,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <div class="pdot" id="pd2"></div><div class="pdot" id="pd3"></div>
     </div>
     <div class="pgrid">
-      <button class="pb" onclick="pi('1')">1</button><button class="pb" onclick="pi('2')">2</button><button class="pb" onclick="pi('3')">3</button>
-      <button class="pb" onclick="pi('4')">4</button><button class="pb" onclick="pi('5')">5</button><button class="pb" onclick="pi('6')">6</button>
-      <button class="pb" onclick="pi('7')">7</button><button class="pb" onclick="pi('8')">8</button><button class="pb" onclick="pi('9')">9</button>
-      <button class="pb gh"></button><button class="pb" onclick="pi('0')">0</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('1')">1</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('2')">2</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('3')">3</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('4')">4</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('5')">5</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('6')">6</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('7')">7</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('8')">8</button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('9')">9</button>
+      <button class="pb gh" style="background:transparent!important;border-color:transparent!important;pointer-events:none"></button><button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="pi('0')">0</button>
       <button class="pb" style="font-size:15px;color:var(--tx2)" onclick="pdel()"><i class="ti ti-backspace"></i></button>
     </div>
     <div class="pem" id="perr"></div>
@@ -426,26 +537,124 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="admin-screen" style="display:none;align-items:center;justify-content:center;position:fixed;inset:0;background:var(--nvy);z-index:3000;padding:16px">
   <div class="lgrid"></div>
   <button class="ws-back" onclick="backToLanding()"><i class="ti ti-arrow-left" style="font-size:14px"></i> Буцах</button>
-  <div class="lcard fi" style="max-width:340px;width:100%">
+  <div class="lcard fi">
     <div class="lico" style="background:rgba(184,98,0,.2);border:2px solid rgba(184,98,0,.4)"><i class="ti ti-shield-lock" style="color:#FCD34D"></i></div>
     <div class="lco">Админ нэвтрэх</div>
-    <div class="lcs" style="margin-bottom:20px">Нууц үгээ оруулна уу</div>
-    <div class="admin-inp-wrap">
-      <input type="password" class="admin-inp" id="admin-pwd" placeholder="Нууц үг оруулна уу" maxlength="20" onkeydown="if(event.key==='Enter')adminLogin()">
-      <button class="admin-eye" onclick="togglePwdVis()" id="eye-btn"><i class="ti ti-eye" id="eye-ico"></i></button>
+    <div class="lcs">ПИН кодоо оруулна уу</div>
+    <div class="lcl" style="margin-bottom:14px;color:var(--tx2)">Админ ПИН</div>
+    <div class="pds" id="adots">
+      <div class="pdot" id="ad0"></div>
+      <div class="pdot" id="ad1"></div>
+      <div class="pdot" id="ad2"></div>
+      <div class="pdot" id="ad3"></div>
     </div>
-    <div class="admin-err" id="admin-err"></div>
-    <button class="admin-login-btn" onclick="adminLogin()"><i class="ti ti-shield-check" style="font-size:15px;vertical-align:-2px;margin-right:5px"></i>Нэвтрэх</button>
-
+    <div class="pgrid">
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('1')">1</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('2')">2</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('3')">3</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('4')">4</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('5')">5</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('6')">6</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('7')">7</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('8')">8</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('9')">9</button>
+      <button class="pb gh" style="background:transparent!important;border-color:transparent!important;pointer-events:none"></button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aPin('0')">0</button>
+      <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aDel()"><i class="ti ti-backspace" style="font-size:18px"></i></button>
+    </div>
+    <div class="pem" id="admin-err"></div>
+    <div class="phi">Анхны ПИН: <strong>1 2 3 4</strong></div>
   </div>
 </div>
 
-<!-- legacy login id for JS compatibility -->
-<div id="ls" style="display:none"></div>
 <!-- legacy -->
 <div id="ls" style="display:none"></div>
 <!-- APP -->
 <div id="as">
+<!-- MOBILE OVERLAY -->
+<div class="mob-overlay-bg" id="mob-overlay-bg" onclick="closeMobDrawer()"></div>
+
+<!-- MOBILE DRAWER -->
+<div class="mob-drawer" id="mob-drawer">
+  <div class="sbrand">
+    <div class="sbrand-row">
+      <div class="sbrand-ic"><i class="ti ti-settings"></i></div>
+      <div><div class="sbrand-nm">Квант Майнинг</div><div class="sbrand-sub">v4.0</div></div>
+      <button onclick="closeMobDrawer()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:4px"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="branchsw" style="margin:9px 0 0">
+      <button class="bswb on" id="mob-brUB" onclick="setBranch('UB');closeMobDrawer()">Улаанбаатар</button>
+      <button class="bswb" id="mob-brBG" onclick="setBranch('BG');closeMobDrawer()">Багануур</button>
+    </div>
+  </div>
+  <div class="sbnav">
+    <div class="nsl">Үндсэн</div>
+    <button class="ni" onclick="mobGoP('dashboard')"><i class="ti ti-layout-dashboard"></i> Хяналтын самбар</button>
+    <button class="ni" onclick="mobGoP('daily')"><i class="ti ti-calendar-stats"></i> Өдрийн явц</button>
+    <button class="ni" onclick="mobGoP('tasks')"><i class="ti ti-clipboard-list"></i> Засварын ажлууд</button>
+    <button class="ni" onclick="mobGoP('equipment')"><i class="ti ti-engine"></i> Тоног төхөөрөмж</button>
+    <div class="nsl">Удирдлага</div>
+    <button class="ni" onclick="mobGoP('team')"><i class="ti ti-users"></i> Инженерүүд</button>
+    <button class="ni" onclick="mobGoP('parts')"><i class="ti ti-package"></i> Сэлбэг хэрэгсэл</button>
+    <button class="ni" onclick="mobGoP('costs')"><i class="ti ti-cash"></i> Зардлын хяналт</button>
+    <button class="ni" onclick="mobGoP('kpi')"><i class="ti ti-trophy"></i> KPI үнэлгээ</button>
+    <button class="ni" onclick="mobGoP('reports')"><i class="ti ti-chart-bar"></i> Тайлан</button>
+    <button class="ni" onclick="mobGoP('chat')"><i class="ti ti-message-circle"></i> Инженерийн чат</button>
+    <div class="nsl">Систем</div>
+    <button class="ni" onclick="mobGoP('settings')"><i class="ti ti-adjustments"></i> Тохиргоо</button>
+    <button class="ni" style="color:#F87171" onclick="doLogout();closeMobDrawer()"><i class="ti ti-logout"></i> Аппаас гарах</button>
+  </div>
+  <div class="sbfoot">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="sbuav" id="mob-sb-av">АТ</div>
+      <div><div class="sbun" id="mob-sb-nm">А. Тэмүүжин</div><div class="sbur" id="mob-sb-rl">Ахлах менежер</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE TOP BAR -->
+<div class="mob-top" id="mob-top">
+  <button class="mob-ham" onclick="openMobDrawer()" aria-label="Цэс"><i class="ti ti-menu-2"></i></button>
+  <span class="mob-pg-title" id="mob-title">Хяналтын самбар</span>
+  <span id="mob-brpill" class="brpill pill-ub" style="font-size:9.5px;flex-shrink:0"><i class="ti ti-map-pin" style="font-size:9px"></i> УБ</span>
+  <button class="ib" onclick="toggleNotif()" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);background:none;flex-shrink:0"><i class="ti ti-bell"></i><span class="ndot" style="border-color:var(--nvy)" id="mob-nb-dot"></span></button>
+  <button class="mob-add" onclick="openAddTask()" aria-label="Ажил нэмэх"><i class="ti ti-plus"></i></button>
+</div>
+
+<!-- MORE MENU PANEL -->
+<div class="mob-more-panel" id="mob-more-panel">
+  <button class="mob-more-item" onclick="mobGoP('daily');closeMobMore()"><i class="ti ti-calendar-stats"></i>Өдрийн явц</button>
+  <button class="mob-more-item" onclick="mobGoP('equipment');closeMobMore()"><i class="ti ti-engine"></i>Тоног төхөөрөмж</button>
+  <button class="mob-more-item" onclick="mobGoP('team');closeMobMore()"><i class="ti ti-users"></i>Инженерүүд</button>
+  <button class="mob-more-item" onclick="mobGoP('costs');closeMobMore()"><i class="ti ti-cash"></i>Зардлын хяналт</button>
+  <button class="mob-more-item" onclick="mobGoP('kpi');closeMobMore()"><i class="ti ti-trophy"></i>KPI үнэлгээ</button>
+  <button class="mob-more-item" onclick="mobGoP('reports');closeMobMore()"><i class="ti ti-chart-bar"></i>Тайлан</button>
+  <button class="mob-more-item" onclick="mobGoP('settings');closeMobMore()"><i class="ti ti-adjustments"></i>Тохиргоо</button>
+  <div class="mob-sep"></div>
+  <button class="mob-more-item danger" onclick="doLogout()"><i class="ti ti-logout"></i>Аппаас гарах</button>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mob-bottom" id="mob-bottom">
+  <button class="mob-nav-btn active" id="mni-dashboard" onclick="mobGoP('dashboard')">
+    <i class="ti ti-layout-dashboard"></i><span>Самбар</span>
+  </button>
+  <button class="mob-nav-btn" id="mni-tasks" onclick="mobGoP('tasks')">
+    <i class="ti ti-clipboard-list"></i><span>Ажлууд</span>
+    <span class="mob-nav-badge" id="mnb-t">0</span>
+  </button>
+  <button class="mob-nav-btn" id="mni-parts" onclick="mobGoP('parts')">
+    <i class="ti ti-package"></i><span>Сэлбэг</span>
+    <span class="mob-nav-badge" id="mnb-p">0</span>
+  </button>
+  <button class="mob-nav-btn" id="mni-chat" onclick="mobGoP('chat')">
+    <i class="ti ti-message-circle"></i><span>Чат</span>
+  </button>
+  <button class="mob-nav-btn" id="mni-more" onclick="toggleMobMore()">
+    <i class="ti ti-dots"></i><span>Цэс</span>
+  </button>
+</div>
+
 <div class="alayout">
   <div class="sdb">
     <div class="sbrand">
@@ -489,6 +698,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <span class="brpill pill-ub" id="brpill"><i class="ti ti-map-pin" style="font-size:10px"></i> Улаанбаатар</span>
       <button class="ib" onclick="toggleNotif()"><i class="ti ti-bell"></i><span class="ndot" id="nb-dot"></span></button>
       <button class="bpri" onclick="openAddTask()"><i class="ti ti-plus" style="font-size:12px"></i> Ажил нэмэх</button>
+      <button class="ib" onclick="doLogout()" title="Аппаас гарах" style="color:var(--red);border-color:var(--red);flex-shrink:0" aria-label="Гарах"><i class="ti ti-logout"></i></button>
     </div>
     <div class="npanel" id="notif-panel">
       <div class="nphdr" id="nphdr">Мэдэгдэлүүд</div>
@@ -637,7 +847,7 @@ const SC={pending:'sp',progress:'sg',done:'sd',overdue:'so'};
 const EQS={'Ажиллаж байна':'sd','Засварт':'sg','Хоцорсон':'so'};
 
 function save(){localStorage.setItem('qm4_db',JSON.stringify(DB));localStorage.setItem('qm4_chat',JSON.stringify(CHAT));localStorage.setItem('qm4_cfg',JSON.stringify(CFG));localStorage.setItem('qm4_pin',curPin);}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function toast(m){var t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){if(t)t.classList.remove('show');},2500);}
 function d(){return DB[curBranch];}
 function fmt(n){return n>=1000000?(n/1000000).toFixed(1)+'сая':n>=1000?(n/1000).toFixed(0)+'мянга':String(n);}
 function fmtF(n){return n.toLocaleString()+(CFG.currency||'₮');}
@@ -648,14 +858,25 @@ function autoCalcPct(t){if(!CFG.autoCalc)return t.pct;if(t.status==='done')retur
 // PIN
 // pi() overridden in landing section
 // pdel() overridden in landing section
-function upDots(){for(let i=0;i<4;i++){let el=document.getElementById('pd'+i);el.classList.remove('on','er');if(i<pinBuf.length)el.classList.add('on');}}
+function upDots(){for(var i=0;i<4;i++){var el=document.getElementById('pd'+i);if(el){el.classList.remove('on','er');if(i<pinBuf.length)el.classList.add('on');}}}
 // doLogout overridden in landing section
 
 // BRANCH & NAV
-function setBranch(b){curBranch=b;document.getElementById('brUB').classList.toggle('on',b==='UB');document.getElementById('brBG').classList.toggle('on',b==='BG');const p=document.getElementById('brpill');if(b==='UB'){p.className='brpill pill-ub';p.innerHTML='<i class="ti ti-map-pin" style="font-size:10px"></i> Улаанбаатар';}else{p.className='brpill pill-bg';p.innerHTML='<i class="ti ti-map-pin" style="font-size:10px"></i> Багануур';}updBadges();rPage(curPage);}
-function updBadges(){const d2=d();document.getElementById('nb-t').textContent=d2.tasks.filter(t=>t.status==='overdue'||t.pri==='critical').length;document.getElementById('nb-p').textContent=d2.parts.filter(p=>p.qty<=p.min).length;document.getElementById('nb-dot').style.display=d2.notifications.length>0?'block':'none';if(typeof updMobBadges==='function'&&typeof isMobile==='function'&&isMobile())updMobBadges();}
-function goP(page,el){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');else{const b=document.querySelector('.ni[data-p="'+page+'"]');if(b)b.classList.add('active');}const titles={dashboard:'Хяналтын самбар',daily:'Өдрийн ажлын явц',tasks:'Засварын ажлууд',equipment:'Тоног төхөөрөмж',team:'Инженерүүд',parts:'Сэлбэг хэрэгсэл',costs:'Зардлын хяналт',kpi:'KPI үнэлгээ',reports:'Тайлан',chat:'Инженерийн чат',settings:'Тохиргоо'};document.getElementById('ptitle').textContent=titles[page]||page;curPage=page;document.getElementById('notif-panel').classList.remove('op');notifOpen=false;rPage(page);}
-function rPage(p){const c=document.getElementById('content');c.classList.remove('fi');void c.offsetWidth;c.classList.add('fi');const d2=d();if(p==='dashboard')rDash(c,d2);else if(p==='daily')rDaily(c,d2);else if(p==='tasks')rTasks(c,d2);else if(p==='equipment')rEquip(c,d2);else if(p==='team')rTeam(c,d2);else if(p==='parts')rParts(c,d2);else if(p==='costs')rCosts(c,d2);else if(p==='kpi')rKPI(c,d2);else if(p==='reports')rReports(c,d2);else if(p==='chat')rChat(c);else if(p==='settings')rSettings(c);}
+function setBranch(b){
+  curBranch=b;
+  var ub=document.getElementById('brUB'); if(ub) ub.classList.toggle('on',b==='UB');
+  var bg=document.getElementById('brBG'); if(bg) bg.classList.toggle('on',b==='BG');
+  var mub=document.getElementById('mob-brUB'); if(mub) mub.classList.toggle('on',b==='UB');
+  var mbg=document.getElementById('mob-brBG'); if(mbg) mbg.classList.toggle('on',b==='BG');
+  var p=document.getElementById('brpill');
+  if(p){if(b==='UB'){p.className='brpill pill-ub';p.innerHTML='<i class="ti ti-map-pin" style="font-size:10px"></i> Улаанбаатар';}else{p.className='brpill pill-bg';p.innerHTML='<i class="ti ti-map-pin" style="font-size:10px"></i> Багануур';}}
+  var mp=document.getElementById('mob-brpill');
+  if(mp){if(b==='UB'){mp.className='brpill pill-ub';mp.innerHTML='<i class="ti ti-map-pin" style="font-size:9px"></i> УБ';}else{mp.className='brpill pill-bg';mp.innerHTML='<i class="ti ti-map-pin" style="font-size:9px"></i> БГ';}}
+  updBadges(); rPage(curPage);
+}
+function updBadges(){var d2=d();var nbt=document.getElementById('nb-t');var nbp=document.getElementById('nb-p');var nbd=document.getElementById('nb-dot');if(nbt)nbt.textContent=d2.tasks.filter(function(t){return t.status==='overdue'||t.pri==='critical';}).length;if(nbp)nbp.textContent=d2.parts.filter(function(p){return p.qty<=p.min;}).length;if(nbd)nbd.style.display=d2.notifications.length>0?'block':'none';if(typeof updMobBadges==='function'&&typeof isMobile==='function'&&isMobile())updMobBadges();}
+function goP(page,el){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');else{var b=document.querySelector('.ni[data-p="'+page+'"]');if(b)b.classList.add('active');}const titles={dashboard:'Хяналтын самбар',daily:'Өдрийн ажлын явц',tasks:'Засварын ажлууд',equipment:'Тоног төхөөрөмж',team:'Инженерүүд',parts:'Сэлбэг хэрэгсэл',costs:'Зардлын хяналт',kpi:'KPI үнэлгээ',reports:'Тайлан',chat:'Инженерийн чат',settings:'Тохиргоо'};document.getElementById('ptitle').textContent=titles[page]||page;curPage=page;var _np=document.getElementById('notif-panel');if(_np)_np.classList.remove('op');notifOpen=false;rPage(page);}
+function rPage(p){var c=document.getElementById('content');if(!c)return;c.classList.remove('fi');void c.offsetWidth;c.classList.add('fi');const d2=d();if(p==='dashboard')rDash(c,d2);else if(p==='daily')rDaily(c,d2);else if(p==='tasks')rTasks(c,d2);else if(p==='equipment')rEquip(c,d2);else if(p==='team')rTeam(c,d2);else if(p==='parts')rParts(c,d2);else if(p==='costs')rCosts(c,d2);else if(p==='kpi')rKPI(c,d2);else if(p==='reports')rReports(c,d2);else if(p==='chat')rChat(c);else if(p==='settings')rSettings(c);}
 
 // TABLE ROW
 function tRow(t){const pct2=autoCalcPct(t);const rc='trow'+(t.status==='done'?' dr':t.status==='overdue'?' orr':'');const cols='1.6fr .8fr .9fr .9fr .8fr .8fr 55px';return`<div class="${rc}" style="grid-template-columns:${cols}" onclick="openTaskDetail(${t.id})"><div><div class="tn">${t.name}</div><div class="te">${t.equip} · ${t.site}</div></div><div><span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span></div><div><span class="sb2 ${SC[t.status]}"><span class="dot"></span>${SL[t.status]}</span></div><div style="font-size:11px">${t.eng}</div><div style="font-size:10px;color:var(--tx2)">${t.due}</div><div><div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;width:44px"><div style="height:100%;width:${pct2}%;background:${pct2>=100?'var(--grn)':pct2>=60?'var(--blue)':'var(--amb)'}"></div></div><div style="font-size:9px;color:var(--tx2);margin-top:1px">${pct2}%</div></div><div><button class="act" onclick="event.stopPropagation();openTaskDetail(${t.id})">Харах</button></div></div>`;}
@@ -801,7 +1022,7 @@ function rSettings(c){pStep=1;newP1='';newP2='';c.innerHTML=`<div class="stw">
 <button style="display:inline-flex;align-items:center;gap:5px;background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:7px;padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer" onclick="resetDB()"><i class="ti ti-refresh" style="font-size:11px"></i> Өгөгдөл шинэчлэх</button></div>
 </div>`;}
 function saveCFG(){CFG.companyName=document.getElementById('cfg-cn').value;CFG.currency=document.getElementById('cfg-cur').value;CFG.normTarget=parseInt(document.getElementById('cfg-nm').value)||5;save();toast('Тохиргоо хадгалагдлаа!');}
-function togCFG(k,id){CFG[k]=!CFG[k];document.getElementById(id).classList.toggle('on',CFG[k]);save();toast(CFG[k]?'Идэвхжлаа':'Идэвхгүй болов');}
+function togCFG(k,id){CFG[k]=!CFG[k];var el=document.getElementById(id);if(el)el.classList.toggle('on',CFG[k]);save();toast(CFG[k]?'Идэвхжлаа':'Идэвхгүй болов');}
 function nPI(v){if(pStep===1){if(newP1.length>=4)return;newP1+=v;updNP(newP1);if(newP1.length===4){setTimeout(()=>{pStep=2;newP2='';updNP('');const m=document.getElementById('pmsg');if(m)m.textContent='Баталгаажуулан дахин оруулна уу';},150);}}else{if(newP2.length>=4)return;newP2+=v;updNP(newP2);if(newP2.length===4){setTimeout(()=>{const m=document.getElementById('pmsg');if(newP1===newP2){curPin=newP1;save();if(m)m.innerHTML='<span class="pok"><i class="ti ti-check"></i> ПИН амжилттай солигдлоо!</span>';newP1='';newP2='';pStep=1;setTimeout(()=>updNP(''),400);toast('ПИН код солигдлоо!');}else{if(m)m.innerHTML='<span class="pnk"><i class="ti ti-x"></i> ПИН таарсангүй. Дахин оролдоно уу.</span>';newP1='';newP2='';pStep=1;updNP('');}},150);}}}
 function nPD(){if(pStep===1&&newP1.length>0){newP1=newP1.slice(0,-1);updNP(newP1);}else if(pStep===2&&newP2.length>0){newP2=newP2.slice(0,-1);updNP(newP2);}}
 function updNP(p){for(let i=0;i<4;i++){const el=document.getElementById('np'+i);if(el)el.classList.toggle('on',i<p.length);}}
@@ -809,9 +1030,9 @@ function saveProfile(){const n=document.getElementById('s-nm'),r=document.getEle
 function resetDB(){if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){localStorage.clear();DB=JSON.parse(JSON.stringify(DEF));CHAT=JSON.parse(JSON.stringify(CHATDEF));CFG={notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5};curPin='1234';toast('Өгөгдөл шинэчлэгдлээ');updBadges();rPage(curPage);}}
 
 // MODALS
-function openModal(html){document.getElementById('mbox').innerHTML=html;document.getElementById('modal').classList.add('op');}
+function openModal(html){document.getElementById('mbox').innerHTML=html;var _ma=document.getElementById('modal');if(_ma)_ma.classList.add('op');}
 function cmo(e){if(e.target===document.getElementById('modal'))closeModal();}
-function closeModal(){document.getElementById('modal').classList.remove('op');}
+function closeModal(){var _mr=document.getElementById('modal');if(_mr)_mr.classList.remove('op');}
 
 function openAddTask(){const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Шинэ засварын ажил</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;margin-bottom:10px;background:${curBranch==='UB'?'#DBEAFE':'#D1FAE5'};color:${curBranch==='UB'?'#1E3A8A':'#065F46'}"><i class="ti ti-map-pin" style="font-size:10px"></i> ${curBranch==='UB'?'Улаанбаатар':'Багануур'} салбар</div>
@@ -921,6 +1142,7 @@ const ADMIN_PWD_KEY = 'qm4_admin_pwd';
 function _hashPwd(s){ var h=0; for(var i=0;i<s.length;i++) h=((h<<5)-h+s.charCodeAt(i))|0; return h.toString(36); }
 var adminPwdHash = localStorage.getItem(ADMIN_PWD_KEY) || _hashPwd('1234');
 var isAdmin = false;
+var adminPinBuf = '';
 
 function show(id){ var el=document.getElementById(id); if(el) el.style.display='flex'; }
 function hide(id){ var el=document.getElementById(id); if(el) el.style.display='none'; }
@@ -928,6 +1150,49 @@ function hideAll(){
   ['landing','worker-screen','share-screen','admin-screen','ls'].forEach(hide);
 }
 
+
+// Admin PIN functions
+function upAdots(){
+  for(var i=0;i<4;i++){
+    var el=document.getElementById('ad'+i);
+    if(el){ el.classList.remove('on','er'); if(i<adminPinBuf.length) el.classList.add('on'); }
+  }
+}
+function aPin(v){
+  if(adminPinBuf.length>=4) return;
+  adminPinBuf += v; upAdots();
+  if(adminPinBuf.length===4){
+    setTimeout(function(){
+      if(_hashPwd(adminPinBuf)===adminPwdHash){
+        hideAll();
+        document.getElementById('as').style.display='block';
+        isAdmin=true; adminPinBuf=''; upAdots();
+        updBadges(); rPage(curPage);
+        toast('Админ горимд нэвтэрлээ ✓');
+      } else {
+        var err=document.getElementById('admin-err');
+        if(err) err.textContent='ПИН код буруу байна!';
+        for(var i=0;i<4;i++){
+          var el=document.getElementById('ad'+i);
+          if(el){ el.classList.remove('on'); el.classList.add('er'); }
+        }
+        var dots=document.getElementById('adots');
+        if(dots) dots.classList.add('shk');
+        setTimeout(function(){
+          adminPinBuf=''; upAdots();
+          var err2=document.getElementById('admin-err'); if(err2) err2.textContent='';
+          var dots2=document.getElementById('adots'); if(dots2) dots2.classList.remove('shk');
+        }, 650);
+      }
+    }, 80);
+  }
+}
+function aDel(){
+  if(adminPinBuf.length>0){
+    adminPinBuf=adminPinBuf.slice(0,-1); upAdots();
+    var err=document.getElementById('admin-err'); if(err) err.textContent='';
+  }
+}
 function showWorkerScreen(){
   hideAll(); show('worker-screen');
   pinBuf=''; upDots();
@@ -943,12 +1208,12 @@ function showShareScreen(){
 }
 function showAdminScreen(){
   hideAll(); show('admin-screen');
-  var el=document.getElementById('admin-pwd');
-  if(el){ el.value=''; setTimeout(function(){ el.focus(); }, 100); }
+  adminPinBuf=''; upAdots();
   var err=document.getElementById('admin-err'); if(err) err.textContent='';
 }
 function backToLanding(){
   hideAll(); show('landing');
+if(typeof updMobBadges==='function') updMobBadges();
   pinBuf=''; upDots();
   var ap=document.getElementById('admin-pwd'); if(ap) ap.value='';
 }
@@ -1168,11 +1433,11 @@ function mobGoP(page){
   var titles={dashboard:'Хяналтын самбар',daily:'Өдрийн явц',tasks:'Засварын ажлууд',equipment:'Тоног төхөөрөмж',team:'Инженерүүд',parts:'Сэлбэг хэрэгсэл',costs:'Зардлын хяналт',kpi:'KPI үнэлгээ',reports:'Тайлан',chat:'Инженерийн чат',settings:'Тохиргоо'};
   var mt=document.getElementById('mob-title'); if(mt) mt.textContent=titles[page]||page;
 }
-function openMobDrawer(){ document.getElementById('sdb-drawer').classList.add('open'); document.getElementById('mob-overlay').classList.add('open'); }
-function closeMobDrawer(){ document.getElementById('sdb-drawer').classList.remove('open'); document.getElementById('mob-overlay').classList.remove('open'); }
+function openMobDrawer(){ var d=document.getElementById('mob-drawer')||document.getElementById('sdb-drawer'); var o=document.getElementById('mob-overlay-bg')||document.getElementById('mob-overlay'); if(d) d.classList.add('open'); if(o) o.classList.add('open'); }
+function closeMobDrawer(){ var d=document.getElementById('mob-drawer')||document.getElementById('sdb-drawer'); var o=document.getElementById('mob-overlay-bg')||document.getElementById('mob-overlay'); if(d) d.classList.remove('open'); if(o) o.classList.remove('open'); }
 function closeMobMenu(){ closeMobDrawer(); closeMobMore(); var np=document.getElementById('notif-panel'); if(np) np.classList.remove('op'); notifOpen=false; }
 function toggleMobMore(){ var m=document.getElementById('mob-more-menu'); var o=document.getElementById('mob-overlay'); var isOpen=m.classList.toggle('open'); o.classList.toggle('open',isOpen); }
-function closeMobMore(){ document.getElementById('mob-more-menu').classList.remove('open'); document.getElementById('mob-overlay').classList.remove('open'); }
+function closeMobMore(){ var m=document.getElementById('mob-more-panel')||document.getElementById('mob-more-menu'); var o=document.getElementById('mob-overlay-bg')||document.getElementById('mob-overlay'); if(m) m.classList.remove('open'); if(o) o.classList.remove('open'); }
 function updMobBadges(){
   var d2=d();
   var nt=d2.tasks.filter(function(t){return t.status==='overdue'||t.pri==='critical';}).length;
