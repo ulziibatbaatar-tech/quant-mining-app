@@ -916,8 +916,53 @@ function rTasks(c,d2){const fs=[{k:'all',l:'Бүгд'},{k:'progress',l:'Яваг
 function setFilt(f){curFilter=f;rPage('tasks');}
 
 // EQUIPMENT
+
+function openEqEdit(eid){
+  if(!isAdmin){toast('Засвар хийх эрх байхгүй.');return;}
+  var d2=d();
+  var eq=d2.equip.find(function(x){return x.id===eid;});
+  if(!eq) return;
+  var opts=['Ажиллаж байна','Засварт','Хоцорсон'].map(function(st){
+    return '<option'+(eq.status===st?' selected':'')+'>'+st+'</option>';
+  }).join('');
+  var html='<div class="mh"><span class="mt2"><i class="ti ti-engine" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Тоног засах — '+eq.name+'</span>'
+    +'<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Байдал</label><select class="fi2" id="eq-st">'+opts+'</select></div>'
+    +'<div class="fgrp"><label class="flbl">Байршил</label><input class="fi2" id="eq-loc" value="'+eq.loc+'"></div>'
+    +'</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Сүүлийн ТО</label><input type="date" class="fi2" id="eq-last" value="'+eq.last+'"></div>'
+    +'<div class="fgrp"><label class="flbl">Дараагийн ТО</label><input type="date" class="fi2" id="eq-next" value="'+eq.next+'"></div>'
+    +'</div>'
+    +'<div class="fgrp"><label class="flbl">Ажилласан цаг</label>'
+    +'<input type="number" class="fi2" id="eq-hrs" value="'+eq.hours+'" min="0" style="max-width:160px"></div>'
+    +'<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'
+    +'<button class="bgh" onclick="closeModal()">Болих</button>'
+    +'<button class="bpri" onclick="saveEqEdit(\''+eid+'\')">'+'<i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>'
+    +'</div>';
+  openModal(html);
+}
+
+function saveEqEdit(eid){
+  var d2=d();
+  var eq=d2.equip.find(function(x){return x.id===eid;});
+  if(!eq) return;
+  var st=document.getElementById('eq-st');
+  var loc=document.getElementById('eq-loc');
+  var last=document.getElementById('eq-last');
+  var next=document.getElementById('eq-next');
+  var hrs=document.getElementById('eq-hrs');
+  if(st) eq.status=st.value;
+  if(loc) eq.loc=loc.value;
+  if(last) eq.last=last.value;
+  if(next) eq.next=next.value;
+  if(hrs) eq.hours=parseInt(hrs.value)||0;
+  save(); closeModal(); rPage(curPage);
+  toast('Тоног мэдээлэл хадгалагдлаа!');
+}
 function rEquip(c,d2){const alts=toAlerts(d2.equip);c.innerHTML=`${alts.length>0?`<div class="alert"><i class="ti ti-alarm" style="font-size:15px;flex-shrink:0"></i><span><strong>${alts.length} тоног</strong> 7 хоногийн дотор ТО хийх шаардлагатай</span></div>`:''}
-<div class="egrid">${d2.equip.map(e=>{const diff=Math.ceil((new Date(e.next)-new Date('2026-05-25'))/86400000);const warn=diff<=7&&diff>=0;return`<div class="eqc" onclick="openEqDetail('${e.id}')" style="${warn?'border-color:#FDE68A':''}"><div class="eqic" style="background:${e.ic};color:${e.it}"><i class="ti ${e.icon}"></i></div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--tx2);margin-bottom:4px">${e.id} · ${e.brand}</div><span class="sb2 ${EQS[e.status]}"><span class="dot"></span>${e.status}</span>${warn?`<div style="font-size:9.5px;color:var(--amb);font-weight:700;margin-top:3px"><i class="ti ti-alarm" style="font-size:10px"></i> ТО ${diff}хон дотор!</div>`:''}<div style="font-size:10px;color:var(--tx3);margin-top:4px">Дараагийн ТО: ${e.next}</div><div style="display:flex;gap:5px;margin-top:7px"><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openQR('${e.id}')"><i class="ti ti-qrcode" style="font-size:11px"></i> QR</button><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openEqDetail('${e.id}')">Дэлг.</button></div></div>`;}).join('')}</div>`;}
+<div class="egrid">${d2.equip.map(e=>{const diff=Math.ceil((new Date(e.next)-new Date('2026-05-25'))/86400000);const warn=diff<=7&&diff>=0;return`<div class="eqc" onclick="openEqDetail('${e.id}')" style="${warn?'border-color:#FDE68A':''}"><div class="eqic" style="background:${e.ic};color:${e.it}"><i class="ti ${e.icon}"></i></div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--tx2);margin-bottom:4px">${e.id} · ${e.brand}</div><span class="sb2 ${EQS[e.status]}"><span class="dot"></span>${e.status}</span>${warn?`<div style="font-size:9.5px;color:var(--amb);font-weight:700;margin-top:3px"><i class="ti ti-alarm" style="font-size:10px"></i> ТО ${diff}хон дотор!</div>`:''}<div style="font-size:10px;color:var(--tx3);margin-top:4px">Дараагийн ТО: ${e.next}</div><div style="display:flex;gap:5px;margin-top:7px"><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openQR('${e.id}')"><i class="ti ti-qrcode" style="font-size:11px"></i> QR</button><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openEqDetail('${e.id}')">Дэлг.</button>${isAdmin?'<button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openEqEdit(\''+e.id+'\');"><i class="ti ti-edit" style="font-size:11px"></i> Засах</button>':''}</div></div>`;}).join('')}</div>`;}
 
 // TEAM
 function rTeam(c,d2){c.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Инженерүүд (${d2.engineers.length})</span></div>
@@ -1016,7 +1061,9 @@ function rSettings(c){
       +'<input class="fi2" id="en-nm-'+i+'" value="'+e.name+'" placeholder="Нэр">'
       +'<input class="fi2" id="en-ph-'+i+'" value="'+e.phone+'" placeholder="Утас">'
       +'<input class="fi2" id="en-sp-'+i+'" value="'+e.spec+'" placeholder="Мэргэшил" style="grid-column:span 2">'
-      +'</div></div>';
+      +'</div>'
+      +'<button onclick="deleteEngineer(\''+e.id+'\')" style="background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;margin-top:3px" title="Устгах"><i class="ti ti-trash" style="font-size:12px"></i></button>'
+      +'</div>';
   });
 
   var html=''
@@ -1083,7 +1130,7 @@ function rSettings(c){
 
     // Engineer list edit
     +'<div class="sts">'
-    +'<div class="sttl"><i class="ti ti-users" style="font-size:13px"></i>Инженерүүдийн мэдээлэл — '+(curBranch==='UB'?'Улаанбаатар':'Багануур')+'</div>'
+    +'<div class="sttl" style="display:flex;align-items:center;justify-content:space-between">'    +'<span><i class="ti ti-users" style="font-size:13px;margin-right:5px"></i>Инженерүүдийн мэдээлэл — '+(curBranch==='UB'?'Улаанбаатар':'Багануур')+'</span>'    +'<button class="bpri" style="font-size:11px;padding:5px 10px" onclick="addEngineer()"><i class="ti ti-user-plus" style="font-size:12px"></i> Нэмэх</button>'    +'</div>'
     + engRows
     +'<div style="display:flex;justify-content:flex-end;margin-top:9px">'
     +'<button class="bsv" onclick="saveEmps()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>'
@@ -1190,13 +1237,76 @@ function openTaskDetail(id){
     +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Зардал</div><div style="font-weight:700">'+(t.cost>0?fmtF(t.cost):'—')+'</div></div>'
     +'</div>'
     + editSection
-    +(t.notes?'<div style="font-size:11px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:7px 9px;margin-bottom:9px">'+t.notes+'</div>':'')
+    +(t.notes?'<div style="font-size:11px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:7px 9px;margin-bottom:9px">'+t.notes+'</div>':'')+function(){  var log=(DB.taskLog&&DB.taskLog[String(t.id)])||[];  if(!log.length) return '';  var rows=log.slice(0,5).map(function(l){    return '<div style="display:flex;gap:8px;padding:4px 0;border-bottom:0.5px solid var(--bdr);font-size:11px">'      +'<span style="color:var(--tx3);min-width:120px">'+l.time+'</span>'      +'<span style="color:var(--tx2)">'+l.msg+'</span>'      +'<span style="color:var(--tx3);margin-left:auto">'+l.user+'</span>'      +'</div>';  }).join('');  return '<div style="margin-bottom:9px">'    +'<div style="font-size:10px;color:var(--tx3);font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Өөрчлөлтийн түүх</div>'    +rows+'</div>';}()
     +'<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'+actionBtns+'</div>';
   openModal(html);
 }
-function saveTaskEdit(id){const all=[...DB.UB.tasks,...DB.BG.tasks];const t=all.find(x=>x.id===id);if(!t)return;t.pct=parseInt(document.getElementById('pct-sl').value);t.status=document.getElementById('st-sel').value;if(t.pct===100)t.status='done';save();updBadges();closeModal();rPage(curPage);toast('Ажлын мэдээлэл хадгалагдлаа!');}
+
+function logTaskActivity(taskId, msg){
+  if(!DB.taskLog) DB.taskLog={};
+  var key=String(taskId);
+  if(!DB.taskLog[key]) DB.taskLog[key]=[];
+  var now=new Date();
+  var timeStr=now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0')+'-'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  DB.taskLog[key].unshift({time:timeStr, msg:msg, user:CFG.userName||'Систем'});
+  if(DB.taskLog[key].length>20) DB.taskLog[key]=DB.taskLog[key].slice(0,20);
+}
+function saveTaskEdit(id){const all=[...DB.UB.tasks,...DB.BG.tasks];const t=all.find(x=>x.id===id);if(!t)return;t.pct=parseInt(document.getElementById('pct-sl').value);t.status=document.getElementById('st-sel').value;if(t.pct===100)t.status='done';logTaskActivity(id,'Төлөв: '+SL[t.status]+' | Явц: '+t.pct+'%');save();updBadges();closeModal();rPage(curPage);toast('Ажлын мэдээлэл хадгалагдлаа!');}
 function deleteTask(id){if(!confirm('Устгах уу?'))return;DB.UB.tasks=DB.UB.tasks.filter(t=>t.id!==id);DB.BG.tasks=DB.BG.tasks.filter(t=>t.id!==id);save();updBadges();closeModal();rPage(curPage);toast('Ажил устгагдлаа');}
 
+
+function openPartEdit(pid){
+  if(!isAdmin){toast('Засвар хийх эрх байхгүй.');return;}
+  var d2=d();
+  var p=d2.parts.find(function(x){return x.id===pid;});
+  if(!p) return;
+  var html='<div class="mh"><span class="mt2"><i class="ti ti-package" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Сэлбэг засах</span>'
+    +'<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
+    +'<div class="fgrp"><label class="flbl">Нэр</label><input class="fi2" id="pe-nm" value="'+p.name+'"></div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Код</label><input class="fi2" id="pe-cd" value="'+p.code+'"></div>'
+    +'<div class="fgrp"><label class="flbl">Тоног</label><input class="fi2" id="pe-eq" value="'+p.equip+'"></div>'
+    +'</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Нэгж үнэ ('+( CFG.currency||'₮')+')</label><input type="number" class="fi2" id="pe-pr" value="'+p.price+'" min="0"></div>'
+    +'<div class="fgrp"><label class="flbl">Доод нөөц</label><input type="number" class="fi2" id="pe-mn" value="'+p.min+'" min="0"></div>'
+    +'</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Хэмжих нэгж</label>'
+    +'<select class="fi2" id="pe-un">'
+    +['ш','л','м','кг','компл'].map(function(u){return '<option'+(p.unit===u?' selected':'')+'>'+u+'</option>';}).join('')
+    +'</select></div>'
+    +'<div class="fgrp"><label class="flbl">Одоогийн тоо</label><input type="number" class="fi2" id="pe-qt" value="'+p.qty+'" min="0"></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'
+    +'<button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deletePart(\''+pid+'\')"><i class="ti ti-trash" style="font-size:11px"></i> Устгах</button>'
+    +'<button class="bgh" onclick="closeModal()">Болих</button>'
+    +'<button class="bpri" onclick="savePartEdit(\''+pid+'\')">'+'<i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>'
+    +'</div>';
+  openModal(html);
+}
+
+function savePartEdit(pid){
+  var d2=d();
+  var p=d2.parts.find(function(x){return x.id===pid;});
+  if(!p) return;
+  var nm=document.getElementById('pe-nm');
+  var cd=document.getElementById('pe-cd');
+  var eq=document.getElementById('pe-eq');
+  var pr=document.getElementById('pe-pr');
+  var mn=document.getElementById('pe-mn');
+  var un=document.getElementById('pe-un');
+  var qt=document.getElementById('pe-qt');
+  if(nm) p.name=nm.value;
+  if(cd) p.code=cd.value;
+  if(eq) p.equip=eq.value;
+  if(pr) p.price=parseInt(pr.value)||0;
+  if(mn) p.min=parseInt(mn.value)||0;
+  if(un) p.unit=un.value;
+  if(qt){ p.qty=parseInt(qt.value)||0; p.status=p.qty===0?'out':p.qty<=p.min?'low':'ok'; }
+  save(); closeModal(); rPage(curPage);
+  toast('Сэлбэгийн мэдээлэл хадгалагдлаа!');
+}
 function openAddPart(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Сэлбэг нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div class="fgrp"><label class="flbl">Нэр *</label><input class="fi2" id="ap-nm" placeholder="Сэлбэгийн нэр"></div>
 <div class="frow"><div class="fgrp"><label class="flbl">Код</label><input class="fi2" id="ap-cd" placeholder="СЛ-00001"></div><div class="fgrp"><label class="flbl">Тоног</label><input class="fi2" id="ap-eq" placeholder="Хөдөлгүүр"></div></div>
@@ -1215,7 +1325,7 @@ function openPartDetail(pid){const d2=d();const p=d2.parts.find(x=>x.id===pid);i
 <div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Нийт үнэлгээ</div><div style="font-weight:700">${fmtF(p.qty*p.price)}</div></div></div>
 <div style="margin-bottom:10px"><label style="font-size:9.5px;color:var(--tx3);margin-bottom:3px;display:block">Тоо хэмжээ шинэчлэх</label>
 <div style="display:flex;align-items:center;gap:10px"><button class="qb qm" style="width:32px;height:32px" onclick="adjQty('${p.id}',-1);document.getElementById('dq').textContent=d().parts.find(x=>x.id==='${p.id}').qty"><i class="ti ti-minus"></i></button><span id="dq" style="font-size:18px;font-weight:700;min-width:36px;text-align:center">${p.qty}</span><button class="qb qp" style="width:32px;height:32px" onclick="adjQty('${p.id}',1);document.getElementById('dq').textContent=d().parts.find(x=>x.id==='${p.id}').qty"><i class="ti ti-plus"></i></button><span style="font-size:11px;color:var(--tx2)">${p.unit}</span></div></div>
-<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deletePart('${p.id}')"><i class="ti ti-trash" style="font-size:11px"></i> Устгах</button><button class="bgh" onclick="closeModal()">Хаах</button></div>`);}
+<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deletePart('${p.id}')"><i class="ti ti-trash" style="font-size:11px"></i> Устгах</button><button class="bgh" onclick="closeModal()">Хаах</button>${isAdmin?`<button class="bpri" onclick="openPartEdit('${p.id}')"><i class="ti ti-edit" style="font-size:11px"></i> Засах</button>`:''}</div>`);}
 function deletePart(pid){if(!confirm('Устгах уу?'))return;const d2=d();d2.parts=d2.parts.filter(p=>p.id!==pid);save();updBadges();closeModal();rPage(curPage);toast('Сэлбэг устгагдлаа');}
 
 function openAddCost(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-cash" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Зардал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
@@ -1227,6 +1337,60 @@ function saveAddCost(){const tid=parseInt(document.getElementById('ac-task').val
 function openEmpEdit(){const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-users" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Инженерийн мэдээлэл засах</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 ${d2.engineers.map((e,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr)"><div class="av" style="background:${e.av};color:${e.at};width:28px;height:28px">${e.name.charAt(0)}</div><div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px"><input class="fi2" id="en-nm-${i}" value="${e.name}" placeholder="Нэр"><input class="fi2" id="en-ph-${i}" value="${e.phone}" placeholder="Утас"><input class="fi2" id="en-sp-${i}" value="${e.spec}" placeholder="Мэргэшил" style="grid-column:span 2"><div style="display:flex;align-items:center;gap:6px"><label class="flbl" style="white-space:nowrap;margin:0">Норм/сар:</label><input class="fi2" type="number" id="en-nr-${i}" value="${e.norm||5}" style="max-width:70px"></div></div></div>`).join('')}
 <div style="display:flex;gap:7px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr);margin-top:6px"><button class="bgh" onclick="closeModal()">Болих</button><button class="bpri" onclick="saveEmps()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>`);}
+
+function addEngineer(){
+  var d2=d();
+  var html='<div class="mh"><span class="mt2"><i class="ti ti-user-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Шинэ инженер нэмэх</span>'
+    +'<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Овог нэр *</label><input class="fi2" id="ae-nm" placeholder="Б. Батбаяр"></div>'
+    +'<div class="fgrp"><label class="flbl">Гар утас</label><input class="fi2" id="ae-ph" placeholder="9900-0000"></div>'
+    +'</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Албан тушаал</label><input class="fi2" id="ae-rl" placeholder="Инженер"></div>'
+    +'<div class="fgrp"><label class="flbl">Мэргэшил</label><input class="fi2" id="ae-sp" placeholder="Хөдөлгүүр, насос"></div>'
+    +'</div>'
+    +'<div class="fgrp"><label class="flbl">Сарын норм (ажлын тоо)</label>'
+    +'<input type="number" class="fi2" id="ae-nr" value="5" min="1" style="max-width:120px"></div>'
+    +'<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'
+    +'<button class="bgh" onclick="closeModal()">Болих</button>'
+    +'<button class="bpri" onclick="saveAddEngineer()"><i class="ti ti-check" style="font-size:11px"></i> Нэмэх</button>'
+    +'</div>';
+  openModal(html);
+}
+
+function saveAddEngineer(){
+  var nm=document.getElementById('ae-nm');
+  if(!nm||!nm.value.trim()){toast('Нэр оруулна уу!');return;}
+  var d2=d();
+  var colors=[['#DBEAFE','#1E3A8A'],['#D1FAE5','#065F46'],['#FEF3C7','#92400E'],['#FEE2E2','#991B1B'],['#EDE9FE','#4C1D95'],['#FCE7F3','#831843']];
+  var ci=d2.engineers.length%colors.length;
+  var newId='E'+Date.now().toString(36).toUpperCase();
+  var ph=document.getElementById('ae-ph');
+  var rl=document.getElementById('ae-rl');
+  var sp=document.getElementById('ae-sp');
+  var nr=document.getElementById('ae-nr');
+  d2.engineers.push({
+    id:newId,
+    name:nm.value.trim(),
+    role:(rl&&rl.value)||'Инженер',
+    spec:(sp&&sp.value)||'',
+    phone:(ph&&ph.value)||'',
+    tasks:0, done:0,
+    av:colors[ci][0], at:colors[ci][1],
+    norm:parseInt((nr&&nr.value)||'5')||5
+  });
+  save(); closeModal(); rPage(curPage);
+  toast('Шинэ инженер нэмэгдлээ!');
+}
+
+function deleteEngineer(eid){
+  if(!confirm('Энэ инженерийг устгах уу?')) return;
+  var d2=d();
+  d2.engineers=d2.engineers.filter(function(e){return e.id!==eid;});
+  save(); rPage(curPage);
+  toast('Инженер устгагдлаа');
+}
 function saveEmps(){const d2=d();d2.engineers.forEach((e,i)=>{const n=document.getElementById('en-nm-'+i),p=document.getElementById('en-ph-'+i),s=document.getElementById('en-sp-'+i),nr=document.getElementById('en-nr-'+i);if(n)e.name=n.value;if(p)e.phone=p.value;if(s)e.spec=s.value;if(nr)e.norm=parseInt(nr.value)||5;});save();closeModal();rPage(curPage);toast('Инженерийн мэдээлэл хадгалагдлаа!');}
 
 function openEqDetail(eid){const d2=d();const e=d2.equip.find(x=>x.id===eid);if(!e)return;const rel=d2.tasks.filter(t=>t.equip.includes(eid));openModal(`<div class="mh"><span class="mt2"><i class="ti ${e.icon}" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>${e.name} — ${e.id}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
@@ -1340,6 +1504,7 @@ function showAdminScreen(){
 }
 function backToLanding(){
   hideAll(); show('landing');
+autoCheckNotifs();
 syncAdminUI();
 if(typeof updMobBadges==='function') updMobBadges();
   pinBuf=''; upDots();
@@ -1617,6 +1782,48 @@ function syncAdminUI(){
   // Add task button - hide for workers
   document.querySelectorAll('.admin-only').forEach(function(el){
     el.style.display=isAdmin?'':'none';
+  });
+}
+
+function autoCheckNotifs(){
+  ['UB','BG'].forEach(function(br){
+    var d2=DB[br];
+    var today=new Date('2026-05-25');
+    d2.equip.forEach(function(eq){
+      var diff=Math.ceil((new Date(eq.next)-today)/86400000);
+      if(diff<=7 && diff>=0){
+        var exists=d2.notifications.some(function(n){
+          return n.title.indexOf(eq.id)>=0 && n.title.indexOf('ТО')>=0;
+        });
+        if(!exists){
+          d2.notifications.unshift({
+            icon:'ti-alarm',
+            ic:diff<=2?'#FEE2E2':'#FEF3C7',
+            it:diff<=2?'#991B1B':'#92400E',
+            title:(diff===0?'ТО өнөөдөр!':diff<=3?'ТО яаралтай — '+diff+'хон':'ТО '+diff+' хоногийн дараа')+' ('+eq.id+')',
+            desc:eq.name+' '+eq.brand+' — '+eq.next+' огноонд ТО хийх шаардлагатай',
+            time:'Автоматаар'
+          });
+        }
+      }
+    });
+    // Overdue tasks
+    d2.tasks.forEach(function(t){
+      if(t.status==='overdue'){
+        var exists=d2.notifications.some(function(n){
+          return n.title.indexOf(t.name.substring(0,10))>=0;
+        });
+        if(!exists){
+          d2.notifications.unshift({
+            icon:'ti-alert-triangle',
+            ic:'#FEE2E2', it:'#991B1B',
+            title:'Хоцорсон засвар: '+t.name.substring(0,25)+(t.name.length>25?'...':''),
+            desc:'Инженер: '+t.eng+' | Хугацаа: '+t.due,
+            time:'Автоматаар'
+          });
+        }
+      }
+    });
   });
 }
 // INIT
