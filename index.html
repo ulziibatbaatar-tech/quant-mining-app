@@ -563,7 +563,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="pb" style="background:#F0F4FF;color:#0B1C36;font-size:22px;font-weight:700;border:1.5px solid #C8D0DE" onclick="aDel()"><i class="ti ti-backspace" style="font-size:18px"></i></button>
     </div>
     <div class="pem" id="admin-err"></div>
-    <div class="phi">Анхны ПИН: <strong>1 2 3 4</strong></div>
+    <div class="phi">Анхны ПИН: <strong>0 0 0 0</strong></div>
   </div>
 </div>
 
@@ -618,7 +618,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <span class="mob-pg-title" id="mob-title">Хяналтын самбар</span>
   <span id="mob-brpill" class="brpill pill-ub" style="font-size:9.5px;flex-shrink:0"><i class="ti ti-map-pin" style="font-size:9px"></i> УБ</span>
   <button class="ib" onclick="toggleNotif()" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);background:none;flex-shrink:0"><i class="ti ti-bell"></i><span class="ndot" style="border-color:var(--nvy)" id="mob-nb-dot"></span></button>
-  <button class="mob-add" onclick="openAddTask()" aria-label="Ажил нэмэх"><i class="ti ti-plus"></i></button>
+  <button class="mob-add admin-only" onclick="openAddTask()" aria-label="Ажил нэмэх"><i class="ti ti-plus"></i></button>
 </div>
 
 <!-- MORE MENU PANEL -->
@@ -697,7 +697,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <div class="srch"><i class="ti ti-search" style="font-size:13px"></i><input type="text" placeholder="Хайх..." oninput="doSearch(this.value)"></div>
       <span class="brpill pill-ub" id="brpill"><i class="ti ti-map-pin" style="font-size:10px"></i> Улаанбаатар</span>
       <button class="ib" onclick="toggleNotif()"><i class="ti ti-bell"></i><span class="ndot" id="nb-dot"></span></button>
-      <button class="bpri" onclick="openAddTask()"><i class="ti ti-plus" style="font-size:12px"></i> Ажил нэмэх</button>
+      <button class="bpri admin-only" onclick="openAddTask()"><i class="ti ti-plus" style="font-size:12px"></i> Ажил нэмэх</button>
       <button class="ib" onclick="doLogout()" title="Аппаас гарах" style="color:var(--red);border-color:var(--red);flex-shrink:0" aria-label="Гарах"><i class="ti ti-logout"></i></button>
     </div>
     <div class="npanel" id="notif-panel">
@@ -834,8 +834,8 @@ const CHATDEF=[
 // STATE
 let DB=JSON.parse(localStorage.getItem('qm4_db')||'null')||JSON.parse(JSON.stringify(DEF));
 let CHAT=JSON.parse(localStorage.getItem('qm4_chat')||'null')||JSON.parse(JSON.stringify(CHATDEF));
-let CFG=JSON.parse(localStorage.getItem('qm4_cfg')||'null')||{notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5};
-let curPin=localStorage.getItem('qm4_pin')||'1234';
+let CFG=JSON.parse(localStorage.getItem('qm4_cfg')||'null')||{notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5,userName:"А. Тэмүүжин",userRole:"Ахлах менежер"};
+let curPin=localStorage.getItem('qm4_pin')||'0000';
 let curBranch='UB',curPage='dashboard',curFilter='all',curDayIdx=0,notifOpen=false;
 let pinBuf='',newP1='',newP2='',pStep=1,pendingImgs=[];
 const DAYS=['2026-05-25','2026-05-24','2026-05-23'];
@@ -920,7 +920,7 @@ function rEquip(c,d2){const alts=toAlerts(d2.equip);c.innerHTML=`${alts.length>0
 <div class="egrid">${d2.equip.map(e=>{const diff=Math.ceil((new Date(e.next)-new Date('2026-05-25'))/86400000);const warn=diff<=7&&diff>=0;return`<div class="eqc" onclick="openEqDetail('${e.id}')" style="${warn?'border-color:#FDE68A':''}"><div class="eqic" style="background:${e.ic};color:${e.it}"><i class="ti ${e.icon}"></i></div><div style="font-size:12px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--tx2);margin-bottom:4px">${e.id} · ${e.brand}</div><span class="sb2 ${EQS[e.status]}"><span class="dot"></span>${e.status}</span>${warn?`<div style="font-size:9.5px;color:var(--amb);font-weight:700;margin-top:3px"><i class="ti ti-alarm" style="font-size:10px"></i> ТО ${diff}хон дотор!</div>`:''}<div style="font-size:10px;color:var(--tx3);margin-top:4px">Дараагийн ТО: ${e.next}</div><div style="display:flex;gap:5px;margin-top:7px"><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openQR('${e.id}')"><i class="ti ti-qrcode" style="font-size:11px"></i> QR</button><button class="act" style="flex:1;text-align:center;border:1px solid var(--bdr);border-radius:5px;padding:3px 0" onclick="event.stopPropagation();openEqDetail('${e.id}')">Дэлг.</button></div></div>`;}).join('')}</div>`;}
 
 // TEAM
-function rTeam(c,d2){c.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Инженерүүд (${d2.engineers.length})</span><button class="bpri" onclick="openEmpEdit()"><i class="ti ti-edit" style="font-size:11px"></i> Нэр засах</button></div>
+function rTeam(c,d2){c.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Инженерүүд (${d2.engineers.length})</span></div>
 <div class="r2">${d2.engineers.map(e=>`<div class="pn" style="display:flex;gap:10px"><div class="av" style="background:${e.av};color:${e.at};width:42px;height:42px;font-size:13px;flex-shrink:0;border-radius:50%">${e.name.charAt(0)}</div><div style="flex:1"><div style="font-size:13px;font-weight:700">${e.name}</div><div style="font-size:11px;color:var(--tx2);margin:2px 0 4px">${e.role}</div><div style="font-size:10px;color:var(--tx3);margin-bottom:4px"><i class="ti ti-tool" style="font-size:10px;vertical-align:-1px"></i> ${e.spec}</div><div style="font-size:10px;color:var(--tx3);margin-bottom:5px"><i class="ti ti-phone" style="font-size:10px;vertical-align:-1px"></i> ${e.phone}</div><div style="display:flex;gap:10px;margin-bottom:4px"><div><div style="font-size:15px;font-weight:700">${e.tasks}</div><div style="font-size:9.5px;color:var(--tx2)">Идэвхтэй</div></div><div><div style="font-size:15px;font-weight:700;color:var(--grn)">${e.done}</div><div style="font-size:9.5px;color:var(--tx2)">Дууссан</div></div><div><div style="font-size:15px;font-weight:700;color:var(--amb)">${e.norm||5}</div><div style="font-size:9.5px;color:var(--tx2)">Норм</div></div></div><div style="height:3px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.round(e.done/(e.done+e.tasks)*100)}%;background:var(--blue)"></div></div></div></div>`).join('')}</div>`;}
 
 // PARTS
@@ -928,11 +928,11 @@ function pSt(p){return p.qty===0?'out':p.qty<=p.min?'low':'ok';}
 function pStBdg(p){const s=pSt(p);return s==='ok'?'sd':s==='low'?'sp':'so';}
 function pStLbl(p){const s=pSt(p);return s==='ok'?'Хангалттай':s==='low'?'Бага нөөц':'Дуссан';}
 function rParts(c,d2){const low=d2.parts.filter(p=>p.qty<=p.min).length;const total=d2.parts.reduce((s,p)=>s+p.qty*p.price,0);c.innerHTML=`${low>0?`<div class="alert"><i class="ti ti-package" style="font-size:15px;flex-shrink:0"></i><span><strong>${low} сэлбэг</strong> нөөц дутагдалтай. Захиалга өгөх шаардлагатай.</span></div>`:''}
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Агуулахын нөөц (${d2.parts.length})</span><div style="display:flex;gap:6px"><button class="bpri" onclick="printPartsReport()"><i class="ti ti-printer" style="font-size:11px"></i> Тайлан</button><button class="bpri" onclick="openAddPart()"><i class="ti ti-plus" style="font-size:11px"></i> Нэмэх</button></div></div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Агуулахын нөөц (${d2.parts.length})</span><div style="display:flex;gap:6px">${isAdmin?'<button class="bpri" onclick="printPartsReport()"><i class="ti ti-printer" style="font-size:11px"></i> Тайлан</button><button class="bpri" onclick="openAddPart()"><i class="ti ti-plus" style="font-size:11px"></i> Нэмэх</button>':''}</div></div>
 <div class="tbl"><div class="par-hdr"><div>Сэлбэгийн нэр</div><div>Код</div><div>Тоо хэмжээ</div><div>Байдал</div><div>Үйлдэл</div></div>
 ${d2.parts.map(p=>`<div class="par-row" style="${pSt(p)!=='ok'?'background:#FFFBF0':''}"><div><div style="font-weight:700;font-size:11.5px">${p.name}</div><div style="font-size:10px;color:var(--tx3)">${p.equip} · ${fmtF(p.price)}/${p.unit}</div></div><div style="font-family:monospace;font-size:10.5px;color:var(--tx2)">${p.code}</div><div class="qty-ctrl"><button class="qb qm" onclick="adjQty('${p.id}',-1)"><i class="ti ti-minus" style="font-size:11px"></i></button><span class="qnum" id="qty-${p.id}" style="color:${p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amb)':'var(--txt)'}">${p.qty}</span><button class="qb qp" onclick="adjQty('${p.id}',1)"><i class="ti ti-plus" style="font-size:11px"></i></button><span style="font-size:9.5px;color:var(--tx3)">${p.unit}</span></div><div><span class="sb2 ${pStBdg(p)}"><span class="dot"></span>${pStLbl(p)}</span></div><div><button class="act" onclick="openPartDetail('${p.id}')">Дэлгэрэнгүй</button></div></div>`).join('')}</div>
 <div style="margin-top:8px;font-size:11px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:8px 11px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px;margin-right:4px"></i>Нийт үнэлгээ: <strong>${fmtF(total)}</strong> · Доод нөөцтэй: <strong>${low} нэр</strong></div>`;}
-function adjQty(pid,delta){const d2=d();const p=d2.parts.find(x=>x.id===pid);if(!p)return;p.qty=Math.max(0,p.qty+delta);save();const el=document.getElementById('qty-'+pid);if(el){el.textContent=p.qty;el.style.color=p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amb)':'var(--txt)';}updBadges();toast(delta>0?`${p.name} +1 (${p.qty} ${p.unit})`:`${p.name} -1 (${p.qty} ${p.unit})`);}
+function adjQty(pid,delta){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}const d2=d();const p=d2.parts.find(x=>x.id===pid);if(!p)return;p.qty=Math.max(0,p.qty+delta);save();const el=document.getElementById('qty-'+pid);if(el){el.textContent=p.qty;el.style.color=p.qty<=0?'var(--red)':p.qty<=p.min?'var(--amb)':'var(--txt)';}updBadges();toast(delta>0?`${p.name} +1 (${p.qty} ${p.unit})`:`${p.name} -1 (${p.qty} ${p.unit})`);}
 // printPartsReport defined below
 
 
@@ -941,7 +941,7 @@ function rCosts(c,d2){const months=['1-р','2-р','3-р','4-р','5-р','6-р'];c
 <div class="srow"><div class="scard"><div class="slbl">Нийт зардал</div><div class="sval ca">${fmt(total)}</div><div class="snote ca">${fmtF(total)}</div></div><div class="scard"><div class="slbl">Сарын дундаж</div><div class="sval">${fmt(Math.round(total/6))}</div></div><div class="scard"><div class="slbl">Зардалтай ажил</div><div class="sval cr">${costTasks.length}</div></div><div class="scard"><div class="slbl">Хамгийн их</div><div class="sval ca">${fmt(Math.max(...d2.costs,0))}</div></div></div>
 <div class="r2"><div class="pn"><div class="ph"><span class="pt">Сарын зардлын график</span><button class="bpri" style="font-size:11px;padding:4px 9px" onclick="printCostReport()"><i class="ti ti-printer" style="font-size:11px"></i> Хэвлэх</button></div>
 <div class="bwrap">${d2.costs.map((v,i)=>`<div class="bcol"><div style="font-size:9.5px;font-weight:700">${v>0?fmt(v):''}</div><div class="bar" style="height:${v>0?Math.round(v/maxC*90)+10:4}px;background:${i===5?'var(--blue)':'var(--blt)'};border:1px solid ${i===5?'var(--bl2)':'#BFDBFE'}"></div><div style="font-size:9.5px;color:var(--tx2)">${months[i]}</div></div>`).join('')}</div></div>
-<div class="pn"><div class="ph"><span class="pt">Ажлын зардал</span><button class="lk" onclick="openAddCost()">+ Нэмэх</button></div>
+<div class="pn"><div class="ph"><span class="pt">Ажлын зардал</span>${isAdmin?'<button class="lk" onclick="openAddCost()">+ Нэмэх</button>':''}</div>
 ${costTasks.length>0?costTasks.map(t=>`<div class="cost-row"><div><div style="font-size:11.5px;font-weight:700">${t.name}</div><div style="font-size:10px;color:var(--tx2)">${t.eng} · ${t.due} · <span class="sb2 ${SC[t.status]}" style="font-size:9.5px"><span class="dot"></span>${SL[t.status]}</span></div></div><div style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap;margin-left:8px">${fmtF(t.cost)}</div></div>`).join(''):`<div style="text-align:center;padding:18px;color:var(--tx3);font-size:12px">Зардал бүртгэгдээгүй</div>`}
 <div style="padding-top:7px;border-top:1px solid var(--bdr);margin-top:4px;display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>Нийт:</span><span class="ca">${fmtF(costTasks.reduce((s,t)=>s+t.cost,0))}</span></div></div></div>`;}
 // printCostReport defined below
@@ -962,7 +962,7 @@ ${kpis.map(k=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0
 
 // REPORTS
 function rReports(c,d2){const months=['1-р','2-р','3-р','4-р','5-р','6-р'];const maxV=Math.max(...d2.monthly);const done=d2.tasks.filter(t=>t.status==='done').length;c.innerHTML=`
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Тайлан</span><div style="display:flex;gap:5px"><button class="bpri" onclick="printPartsReport()"><i class="ti ti-package" style="font-size:11px"></i> Сэлбэг</button><button class="bpri" onclick="printCostReport()"><i class="ti ti-cash" style="font-size:11px"></i> Зардал</button><button class="bpri" onclick="printKPI()"><i class="ti ti-trophy" style="font-size:11px"></i> KPI</button><button class="bpri" onclick="printNormReport()"><i class="ti ti-target" style="font-size:11px"></i> Норм</button><button class="bpri" onclick="printFull()"><i class="ti ti-file-export" style="font-size:11px"></i> Бүрэн</button></div></div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700">Тайлан</span>${isAdmin?'<div style="display:flex;gap:5px"><button class="bpri" onclick="printPartsReport()"><i class="ti ti-package" style="font-size:11px"></i> Сэлбэг</button><button class="bpri" onclick="printCostReport()"><i class="ti ti-cash" style="font-size:11px"></i> Зардал</button><button class="bpri" onclick="printKPI()"><i class="ti ti-trophy" style="font-size:11px"></i> KPI</button><button class="bpri" onclick="printNormReport()"><i class="ti ti-target" style="font-size:11px"></i> Норм</button><button class="bpri" onclick="printFull()"><i class="ti ti-file-export" style="font-size:11px"></i> Бүрэн</button></div>':''}</div>
 <div class="srow"><div class="scard"><div class="slbl">Дууссан</div><div class="sval cg">${done}</div></div><div class="scard"><div class="slbl">Хугацаандаа</div><div class="sval">${Math.round(done/d2.tasks.length*100)}%</div></div><div class="scard"><div class="slbl">Инженер</div><div class="sval">${d2.engineers.length}</div></div><div class="scard"><div class="slbl">Дутагдал</div><div class="sval ca">${d2.parts.filter(p=>p.qty<=p.min).length}</div></div></div>
 <div class="r2"><div class="pn"><div class="ph"><span class="pt">Сарын гүйцэтгэл</span></div><div class="bwrap">${d2.monthly.map((v,i)=>`<div class="bcol"><div style="font-size:9.5px;font-weight:700">${v}</div><div class="bar" style="height:${Math.round(v/maxV*90)+10}px;background:${i===5?'var(--blue)':'var(--blt)'};border:1px solid ${i===5?'var(--bl2)':'#BFDBFE'}"></div><div style="font-size:9.5px;color:var(--tx2)">${months[i]}</div></div>`).join('')}</div></div>
 <div class="pn"><div class="ph"><span class="pt">Ажлын төрлөөр</span></div>${[{t:'Яаралтай засвар',cl:'#EF4444'},{t:'Урьдчилсан үзлэг',cl:'#3B82F6'},{t:'ТО засвар',cl:'#10B981'},{t:'Ерөнхий үзлэг',cl:'#F59E0B'},{t:'Их засвар',cl:'#8B5CF6'}].map(x=>{const cnt=d2.tasks.filter(t=>t.type&&t.type.includes(x.t.split(' ')[0])).length;return cnt>0?`<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--bdr)"><div style="width:8px;height:8px;border-radius:50%;background:${x.cl};flex-shrink:0"></div><div style="flex:1;font-size:12px">${x.t}</div><div style="font-size:12px;font-weight:700">${cnt}</div></div>`:''}).join('')}</div></div>`;}
@@ -998,43 +998,142 @@ function clearChat(){if(confirm('Бүх чатыг устгах уу?')){CHAT=[]
 function viewImg(src){openModal(`<div class="mh"><span class="mt2">Зураг</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div><img src="${src}" style="width:100%;border-radius:8px;max-height:60vh;object-fit:contain">`);}
 
 // SETTINGS
-function rSettings(c){pStep=1;newP1='';newP2='';c.innerHTML=`<div class="stw">
-<div class="sts"><div class="sttl"><i class="ti ti-building" style="font-size:13px"></i>Байгууллагын тохиргоо</div>
-<div class="frow"><div class="fgrp"><label class="flbl">Компанийн нэр</label><input class="fi2" id="cfg-cn" value="${CFG.companyName}"></div><div class="fgrp"><label class="flbl">Мөнгөн тэмдэгт</label><select class="fi2" id="cfg-cur"><option ${CFG.currency==='₮'?'selected':''}>₮</option><option ${CFG.currency==='USD'?'selected':''}>USD</option></select></div></div>
-<div class="fgrp"><label class="flbl">Сарын норм (ажил/инженер)</label><input type="number" class="fi2" id="cfg-nm" value="${CFG.normTarget||5}" min="1" style="max-width:120px"></div>
-<button class="bsv" onclick="saveCFG()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>
-<div class="sts"><div class="sttl"><i class="ti ti-user" style="font-size:13px"></i>Хэрэглэгчийн мэдээлэл</div>
-<div class="frow"><div class="fgrp"><label class="flbl">Овог нэр</label><input class="fi2" id="s-nm" value="${document.getElementById('sb-nm').textContent}"></div><div class="fgrp"><label class="flbl">Гар утас</label><input class="fi2" value="+976 9900-0000"></div></div>
-<div class="frow"><div class="fgrp"><label class="flbl">Албан тушаал</label><input class="fi2" id="s-rl" value="${document.getElementById('sb-rl').textContent}"></div><div class="fgrp"><label class="flbl">И-мэйл</label><input class="fi2" value="manager@quantmining.mn"></div></div>
-<button class="bsv" onclick="saveProfile()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>
-<div class="sts"><div class="sttl"><i class="ti ti-sliders" style="font-size:13px"></i>Системийн тохиргоо</div>
-<div class="stg-row"><div><div class="stg-lbl">Мэдэгдэл идэвхтэй</div><div class="stg-sub">Ажлын хугацаа, нөөцийн дохио</div></div><button class="tog${CFG.notifications?' on':''}" id="tog-n" onclick="togCFG('notifications','tog-n')"></button></div>
-<div class="stg-row"><div><div class="stg-lbl">Автомат явц тооцоолол</div><div class="stg-sub">Огноонд үндэслэн % автоматаар тооцоолно</div></div><button class="tog${CFG.autoCalc?' on':''}" id="tog-a" onclick="togCFG('autoCalc','tog-a')"></button></div>
-</div>
-<div class="sts"><div class="sttl"><i class="ti ti-lock" style="font-size:13px"></i>ПИН код солих</div>
-<p style="font-size:11.5px;color:var(--tx2);margin-bottom:10px">Шинэ 4 оронтой ПИН код тохируулна уу.</p>
-<div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
-<div><div class="npw" id="npw"><div class="npdot" id="np0"></div><div class="npdot" id="np1"></div><div class="npdot" id="np2"></div><div class="npdot" id="np3"></div></div>
-<div class="pmsg" id="pmsg" style="margin-bottom:7px">Шинэ ПИН оруулна уу</div>
-<div class="mpad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(n=>`<button class="mpb" ${n===''?'style="visibility:hidden"':''} onclick="${n==='⌫'?'nPD()':n===''?'':'nPI(\''+n+'\')'}">${n==='⌫'?'<i class="ti ti-backspace"></i>':n}</button>`).join('')}</div></div>
-<div style="background:var(--bg3);border-radius:var(--rm);padding:11px;font-size:11px;color:var(--tx2);max-width:170px;margin-top:22px"><div style="font-weight:700;color:var(--txt);margin-bottom:4px">Заавар</div><div>1. Шинэ ПИН оруулна</div><div style="margin-top:2px">2. Баталгаажуулан дахин</div><div style="margin-top:2px">3. Таарвал хадгалагдана</div></div></div></div>
-<div class="sts"><div class="sttl" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px;color:var(--red)"></i>Өгөгдөл удирдах</div>
-<button style="display:inline-flex;align-items:center;gap:5px;background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:7px;padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer" onclick="resetDB()"><i class="ti ti-refresh" style="font-size:11px"></i> Өгөгдөл шинэчлэх</button></div>
-</div>`;}
+function rSettings(c){
+  pStep=1; newP1=''; newP2='';
+  var d2=d();
+  var nm=CFG.userName||'А. Тэмүүжин';
+  var rl=CFG.userRole||'Ахлах менежер';
+  var cn=CFG.companyName||'Квант Майнинг ХХК';
+  var cur=CFG.currency||'₮';
+  var nt=CFG.normTarget||5;
+
+  // Build engineer rows for current branch
+  var engRows='';
+  d2.engineers.forEach(function(e,i){
+    engRows+='<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr)">'
+      +'<div class="av" style="background:'+e.av+';color:'+e.at+';width:28px;height:28px">'+e.name.charAt(0)+'</div>'
+      +'<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px">'
+      +'<input class="fi2" id="en-nm-'+i+'" value="'+e.name+'" placeholder="Нэр">'
+      +'<input class="fi2" id="en-ph-'+i+'" value="'+e.phone+'" placeholder="Утас">'
+      +'<input class="fi2" id="en-sp-'+i+'" value="'+e.spec+'" placeholder="Мэргэшил" style="grid-column:span 2">'
+      +'</div></div>';
+  });
+
+  var html=''
+    +'<div class="stw">'
+
+    // Company settings
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-building" style="font-size:13px"></i>Байгууллагын тохиргоо</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Компанийн нэр</label><input class="fi2" id="cfg-cn" value="'+cn+'"></div>'
+    +'<div class="fgrp"><label class="flbl">Мөнгөн тэмдэгт</label><select class="fi2" id="cfg-cur">'
+    +'<option'+(cur==='₮'?' selected':'')+'>₮</option>'
+    +'<option'+(cur==='USD'?' selected':'')+'>USD</option>'
+    +'</select></div></div>'
+    +'<div class="fgrp"><label class="flbl">Сарын норм (ажил/инженер)</label>'
+    +'<input type="number" class="fi2" id="cfg-nm" value="'+nt+'" min="1" style="max-width:120px"></div>'
+    +'<button class="bsv" onclick="saveCFG()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>'
+    +'</div>'
+
+    // User profile
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-user" style="font-size:13px"></i>Хэрэглэгчийн мэдээлэл</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Овог нэр</label><input class="fi2" id="s-nm" value="'+nm+'"></div>'
+    +'<div class="fgrp"><label class="flbl">Гар утас</label><input class="fi2" id="s-ph" value="'+( CFG.userPhone||'+976 9900-0000')+'"></div>'
+    +'</div>'
+    +'<div class="frow">'
+    +'<div class="fgrp"><label class="flbl">Албан тушаал</label><input class="fi2" id="s-rl" value="'+rl+'"></div>'
+    +'<div class="fgrp"><label class="flbl">И-мэйл</label><input class="fi2" id="s-em" value="'+(CFG.userEmail||'manager@quantmining.mn')+'"></div>'
+    +'</div>'
+    +'<button class="bsv" onclick="saveProfile()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>'
+    +'</div>'
+
+    // System toggles
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-sliders" style="font-size:13px"></i>Системийн тохиргоо</div>'
+    +'<div class="stg-row"><div><div class="stg-lbl">Мэдэгдэл идэвхтэй</div><div class="stg-sub">Ажлын хугацаа, нөөцийн дохио</div></div>'
+    +'<button class="tog'+(CFG.notifications?' on':'')+'" id="tog-n" onclick="togCFG(\'notifications\',\'tog-n\')"></button></div>'
+    +'<div class="stg-row"><div><div class="stg-lbl">Автомат явц тооцоолол</div><div class="stg-sub">Огноонд үндэслэн % автоматаар тооцоолно</div></div>'
+    +'<button class="tog'+(CFG.autoCalc?' on':'')+'" id="tog-a" onclick="togCFG(\'autoCalc\',\'tog-a\')"></button></div>'
+    +'</div>'
+
+    // Worker PIN change
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-user-check" style="font-size:13px"></i>Ажилтны нэвтрэх ПИН солих</div>'
+    +'<p style="font-size:11.5px;color:var(--tx2);margin-bottom:10px">Ажилтны нэвтрэх 4 оронтой тоо солих. Анхны: <strong>0000</strong></p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+    +'<div class="fgrp"><label class="flbl">Шинэ ПИН</label><input type="password" class="fi2" id="new-wpin" placeholder="0000" maxlength="4" inputmode="numeric" style="max-width:120px"></div>'
+    +'<div class="fgrp"><label class="flbl">Баталгаажуулах</label><input type="password" class="fi2" id="new-wpin2" placeholder="0000" maxlength="4" inputmode="numeric" style="max-width:120px"></div>'
+    +'</div>'
+    +'<button class="bsv" onclick="saveWorkerPin()"><i class="ti ti-check" style="font-size:11px"></i> ПИН солих</button>'
+    +'</div>'
+
+    // Admin PIN change
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-shield-lock" style="font-size:13px"></i>Админ нэвтрэх ПИН солих</div>'
+    +'<p style="font-size:11.5px;color:var(--tx2);margin-bottom:10px">Админ нэвтрэх 4 оронтой тоо солих. Анхны: <strong>1234</strong></p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+    +'<div class="fgrp"><label class="flbl">Шинэ ПИН</label><input type="password" class="fi2" id="new-apwd" placeholder="0000" maxlength="4" inputmode="numeric" style="max-width:120px"></div>'
+    +'<div class="fgrp"><label class="flbl">Баталгаажуулах</label><input type="password" class="fi2" id="new-apwd2" placeholder="0000" maxlength="4" inputmode="numeric" style="max-width:120px"></div>'
+    +'</div>'
+    +'<button class="bsv" onclick="saveAdminPwd()"><i class="ti ti-check" style="font-size:11px"></i> ПИН солих</button>'
+    +'</div>'
+
+    // Engineer list edit
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-users" style="font-size:13px"></i>Инженерүүдийн мэдээлэл — '+(curBranch==='UB'?'Улаанбаатар':'Багануур')+'</div>'
+    + engRows
+    +'<div style="display:flex;justify-content:flex-end;margin-top:9px">'
+    +'<button class="bsv" onclick="saveEmps()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>'
+    +'</div>'
+
+    // Data reset
+    +'<div class="sts">'
+    +'<div class="sttl" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px;color:var(--red)"></i>Өгөгдөл удирдах</div>'
+    +'<button style="display:inline-flex;align-items:center;gap:5px;background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:7px;padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer" onclick="resetDB()">'
+    +'<i class="ti ti-refresh" style="font-size:11px"></i> Өгөгдөл шинэчлэх</button>'
+    +'</div>'
+
+    +'</div>';
+
+  c.innerHTML=html;
+}
 function saveCFG(){CFG.companyName=document.getElementById('cfg-cn').value;CFG.currency=document.getElementById('cfg-cur').value;CFG.normTarget=parseInt(document.getElementById('cfg-nm').value)||5;save();toast('Тохиргоо хадгалагдлаа!');}
 function togCFG(k,id){CFG[k]=!CFG[k];var el=document.getElementById(id);if(el)el.classList.toggle('on',CFG[k]);save();toast(CFG[k]?'Идэвхжлаа':'Идэвхгүй болов');}
 function nPI(v){if(pStep===1){if(newP1.length>=4)return;newP1+=v;updNP(newP1);if(newP1.length===4){setTimeout(()=>{pStep=2;newP2='';updNP('');const m=document.getElementById('pmsg');if(m)m.textContent='Баталгаажуулан дахин оруулна уу';},150);}}else{if(newP2.length>=4)return;newP2+=v;updNP(newP2);if(newP2.length===4){setTimeout(()=>{const m=document.getElementById('pmsg');if(newP1===newP2){curPin=newP1;save();if(m)m.innerHTML='<span class="pok"><i class="ti ti-check"></i> ПИН амжилттай солигдлоо!</span>';newP1='';newP2='';pStep=1;setTimeout(()=>updNP(''),400);toast('ПИН код солигдлоо!');}else{if(m)m.innerHTML='<span class="pnk"><i class="ti ti-x"></i> ПИН таарсангүй. Дахин оролдоно уу.</span>';newP1='';newP2='';pStep=1;updNP('');}},150);}}}
 function nPD(){if(pStep===1&&newP1.length>0){newP1=newP1.slice(0,-1);updNP(newP1);}else if(pStep===2&&newP2.length>0){newP2=newP2.slice(0,-1);updNP(newP2);}}
 function updNP(p){for(let i=0;i<4;i++){const el=document.getElementById('np'+i);if(el)el.classList.toggle('on',i<p.length);}}
-function saveProfile(){const n=document.getElementById('s-nm'),r=document.getElementById('s-rl');if(n&&r){document.getElementById('sb-nm').textContent=n.value;document.getElementById('sb-rl').textContent=r.value;const av=n.value.split(' ').map(x=>x.charAt(0)).join('').substring(0,2).toUpperCase();document.getElementById('sb-av').textContent=av||'АТ';}toast('Профайл хадгалагдлаа!');}
-function resetDB(){if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){localStorage.clear();DB=JSON.parse(JSON.stringify(DEF));CHAT=JSON.parse(JSON.stringify(CHATDEF));CFG={notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5};curPin='1234';toast('Өгөгдөл шинэчлэгдлээ');updBadges();rPage(curPage);}}
+function saveProfile(){
+  var n=document.getElementById('s-nm'), r=document.getElementById('s-rl');
+  if(n&&r){
+    var nm=n.value.trim()||'А. Тэмүүжин';
+    var rl=r.value.trim()||'Ахлах менежер';
+    // Save to CFG for persistence
+    CFG.userName=nm; CFG.userRole=rl;
+    save();
+    // Update sidebar
+    var snm=document.getElementById('sb-nm'); if(snm) snm.textContent=nm;
+    var srl=document.getElementById('sb-rl'); if(srl) srl.textContent=rl;
+    var sav=document.getElementById('sb-av');
+    var av=nm.split(' ').map(function(x){return x.charAt(0);}).join('').substring(0,2).toUpperCase();
+    if(sav) sav.textContent=av||'АТ';
+    // Update mobile sidebar too
+    var msn=document.getElementById('mob-sb-nm'); if(msn) msn.textContent=nm;
+    var msr=document.getElementById('mob-sb-rl'); if(msr) msr.textContent=rl;
+    var msa=document.getElementById('mob-sb-av'); if(msa) msa.textContent=av||'АТ';
+  }
+  toast('Профайл хадгалагдлаа!');
+}
+function resetDB(){if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){localStorage.clear();DB=JSON.parse(JSON.stringify(DEF));CHAT=JSON.parse(JSON.stringify(CHATDEF));CFG={notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5};curPin='0000';toast('Өгөгдөл шинэчлэгдлээ');updBadges();rPage(curPage);}}
 
 // MODALS
 function openModal(html){document.getElementById('mbox').innerHTML=html;var _ma=document.getElementById('modal');if(_ma)_ma.classList.add('op');}
 function cmo(e){if(e.target===document.getElementById('modal'))closeModal();}
 function closeModal(){var _mr=document.getElementById('modal');if(_mr)_mr.classList.remove('op');}
 
-function openAddTask(){const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Шинэ засварын ажил</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+function openAddTask(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Шинэ засварын ажил</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;margin-bottom:10px;background:${curBranch==='UB'?'#DBEAFE':'#D1FAE5'};color:${curBranch==='UB'?'#1E3A8A':'#065F46'}"><i class="ti ti-map-pin" style="font-size:10px"></i> ${curBranch==='UB'?'Улаанбаатар':'Багануур'} салбар</div>
 <div class="fgrp"><label class="flbl">Ажлын нэр *</label><input class="fi2" id="at-nm" placeholder="Засварын ажлын нэр"></div>
 <div class="frow"><div class="fgrp"><label class="flbl">Тоног</label><select class="fi2" id="at-eq">${d2.equip.map(e=>`<option value="${e.id}">${e.name} (${e.id})</option>`).join('')}</select></div><div class="fgrp"><label class="flbl">Ач холбогдол</label><select class="fi2" id="at-pr"><option value="critical">🔴 Яаралтай</option><option value="high">🟡 Өндөр</option><option value="medium" selected>🔵 Дунд</option><option value="low">🟢 Бага</option></select></div></div>
@@ -1045,32 +1144,60 @@ function openAddTask(){const d2=d();openModal(`<div class="mh"><span class="mt2"
 <div style="display:flex;gap:7px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bgh" onclick="closeModal()">Болих</button><button class="bpri" onclick="saveAddTask()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>`);}
 function saveAddTask(){const nm=document.getElementById('at-nm').value.trim();if(!nm){alert('Ажлын нэр оруулна уу!');return;}const d2=d();const eqSel=document.getElementById('at-eq').value;const eqObj=d2.equip.find(e=>e.id===eqSel);const pct2=parseInt(document.getElementById('at-pct').value)||0;d2.tasks.push({id:Date.now(),name:nm,equip:eqObj?eqObj.name+' ('+eqObj.id+')':eqSel,type:document.getElementById('at-tp').value,pri:document.getElementById('at-pr').value,status:pct2===100?'done':'pending',eng:document.getElementById('at-en').value,due:document.getElementById('at-due').value,started:document.getElementById('at-st').value,site:curBranch==='UB'?'Улаанбаатар':'Багануур',pct:pct2,cost:parseInt(document.getElementById('at-cs').value)||0,notes:document.getElementById('at-nt').value});save();updBadges();closeModal();rPage(curPage);toast('Шинэ ажил нэмэгдлээ!');}
 
-function openTaskDetail(id){const all=[...DB.UB.tasks,...DB.BG.tasks];const t=all.find(x=>x.id===id);if(!t)return;const pct2=autoCalcPct(t);openModal(`<div class="mh"><span class="mt2"><i class="ti ti-clipboard-text" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Ажлын дэлгэрэнгүй</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
-<div style="font-size:14px;font-weight:700;margin-bottom:7px">${t.name}</div>
-<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px"><span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span><span class="sb2 ${SC[t.status]}"><span class="dot"></span>${SL[t.status]}</span></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Тоног</div><div style="font-weight:700">${t.equip}</div></div>
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Инженер</div><div style="font-weight:700">${t.eng}</div></div>
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Эхлэсэн</div><div style="font-weight:700">${t.started||'—'}</div></div>
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Дуусах огноо</div><div style="font-weight:700">${t.due}</div></div>
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Байршил</div><div style="font-weight:700">${t.site}</div></div>
-<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Зардал</div><div style="font-weight:700">${t.cost>0?fmtF(t.cost):'—'}</div></div>
-</div>
-<div style="margin-bottom:10px">
-<div style="font-size:9.5px;color:var(--tx3);margin-bottom:3px">Гүйцэтгэл (автомат тооцоо: <strong style="color:var(--blue)">${pct2}%</strong>)</div>
-<input type="range" min="0" max="100" value="${t.pct}" id="pct-sl" oninput="document.getElementById('pct-lbl').textContent=this.value+'%'" style="width:100%;accent-color:var(--blue)">
-<div style="font-size:10.5px;color:var(--tx2);margin-top:2px">Гарын явц: <strong id="pct-lbl">${t.pct}%</strong></div></div>
-<div style="margin-bottom:10px"><label style="font-size:9.5px;color:var(--tx3);margin-bottom:3px;display:block">Төлөв өөрчлөх</label>
-<select class="fi2" id="st-sel" style="max-width:220px"><option value="pending" ${t.status==='pending'?'selected':''}>⏳ Хүлээж байна</option><option value="progress" ${t.status==='progress'?'selected':''}>🔄 Явагдаж байна</option><option value="done" ${t.status==='done'?'selected':''}>✅ Дууссан</option><option value="overdue" ${t.status==='overdue'?'selected':''}>🔴 Хоцорсон</option></select></div>
-${t.notes?`<div style="font-size:11px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:7px 9px;margin-bottom:9px">${t.notes}</div>`:''}
-<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">
-<button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deleteTask(${t.id})"><i class="ti ti-trash" style="font-size:11px"></i> Устгах</button>
-<button class="bgh" onclick="closeModal()">Хаах</button>
-<button class="bpri" onclick="saveTaskEdit(${t.id})"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>`);}
+function openTaskDetail(id){
+  var all=[...DB.UB.tasks,...DB.BG.tasks];
+  var t=all.find(function(x){return x.id===id;});
+  if(!t) return;
+  var pct2=autoCalcPct(t);
+  var editSection='';
+  if(isAdmin){
+    editSection='<div style="margin-bottom:10px">'
+      +'<div style="font-size:9.5px;color:var(--tx3);margin-bottom:3px">Гүйцэтгэл (автомат: <strong style=\"color:var(--blue)\">'+pct2+'%</strong>)</div>'
+      +'<input type="range" min="0" max="100" value="'+t.pct+'" id="pct-sl" oninput="document.getElementById(\'pct-lbl\').textContent=this.value+\'%\';" style="width:100%;accent-color:var(--blue)">'
+      +'<div style="font-size:10.5px;color:var(--tx2);margin-top:2px">Гарын явц: <strong id="pct-lbl">'+t.pct+'%</strong></div></div>'
+      +'<div style="margin-bottom:10px"><label style="font-size:9.5px;color:var(--tx3);margin-bottom:3px;display:block">Төлөв өөрчлөх</label>'
+      +'<select class="fi2" id="st-sel" style="max-width:220px">'
+      +'<option value="pending"'+(t.status==='pending'?' selected':'')+'>⏳ Хүлээж байна</option>'
+      +'<option value="progress"'+(t.status==='progress'?' selected':'')+'>🔄 Явагдаж байна</option>'
+      +'<option value="done"'+(t.status==='done'?' selected':'')+'>✅ Дууссан</option>'
+      +'<option value="overdue"'+(t.status==='overdue'?' selected':'')+'>🔴 Хоцорсон</option>'
+      +'</select></div>';
+  } else {
+    editSection='<div style="margin-bottom:10px;background:var(--bg3);border-radius:var(--rm);padding:10px 12px;font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:7px">'
+      +'<i class="ti ti-lock" style="font-size:16px;color:var(--blue);flex-shrink:0"></i>'
+      +'<span>Засварлах эрх байхгүй. <strong>Админ горимд</strong> нэвтэрнэ үү.</span></div>';
+  }
+  var actionBtns='<button class="bgh" onclick="closeModal()">Хаах</button>';
+  if(isAdmin){
+    actionBtns='<button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deleteTask('+t.id+')">'
+      +'<i class="ti ti-trash" style="font-size:11px"></i> Устгах</button>'
+      +'<button class="bgh" onclick="closeModal()">Хаах</button>'
+      +'<button class="bpri" onclick="saveTaskEdit('+t.id+')">'
+      +'<i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>';
+  }
+  var html='<div class="mh"><span class="mt2"><i class="ti ti-clipboard-text" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Ажлын дэлгэрэнгүй</span>'
+    +'<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
+    +'<div style="font-size:14px;font-weight:700;margin-bottom:7px">'+t.name+'</div>'
+    +'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">'
+    +'<span class="bdg '+PC[t.pri]+'">'+PL[t.pri]+'</span>'
+    +'<span class="sb2 '+SC[t.status]+'"><span class="dot"></span>'+SL[t.status]+'</span></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Тоног</div><div style="font-weight:700">'+t.equip+'</div></div>'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Инженер</div><div style="font-weight:700">'+t.eng+'</div></div>'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Эхлэсэн</div><div style="font-weight:700">'+(t.started||'—')+'</div></div>'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Дуусах огноо</div><div style="font-weight:700">'+t.due+'</div></div>'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Байршил</div><div style="font-weight:700">'+t.site+'</div></div>'
+    +'<div><div style="font-size:9.5px;color:var(--tx3);margin-bottom:1px">Зардал</div><div style="font-weight:700">'+(t.cost>0?fmtF(t.cost):'—')+'</div></div>'
+    +'</div>'
+    + editSection
+    +(t.notes?'<div style="font-size:11px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:7px 9px;margin-bottom:9px">'+t.notes+'</div>':'')
+    +'<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'+actionBtns+'</div>';
+  openModal(html);
+}
 function saveTaskEdit(id){const all=[...DB.UB.tasks,...DB.BG.tasks];const t=all.find(x=>x.id===id);if(!t)return;t.pct=parseInt(document.getElementById('pct-sl').value);t.status=document.getElementById('st-sel').value;if(t.pct===100)t.status='done';save();updBadges();closeModal();rPage(curPage);toast('Ажлын мэдээлэл хадгалагдлаа!');}
 function deleteTask(id){if(!confirm('Устгах уу?'))return;DB.UB.tasks=DB.UB.tasks.filter(t=>t.id!==id);DB.BG.tasks=DB.BG.tasks.filter(t=>t.id!==id);save();updBadges();closeModal();rPage(curPage);toast('Ажил устгагдлаа');}
 
-function openAddPart(){openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Сэлбэг нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+function openAddPart(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Сэлбэг нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div class="fgrp"><label class="flbl">Нэр *</label><input class="fi2" id="ap-nm" placeholder="Сэлбэгийн нэр"></div>
 <div class="frow"><div class="fgrp"><label class="flbl">Код</label><input class="fi2" id="ap-cd" placeholder="СЛ-00001"></div><div class="fgrp"><label class="flbl">Тоног</label><input class="fi2" id="ap-eq" placeholder="Хөдөлгүүр"></div></div>
 <div class="frow"><div class="fgrp"><label class="flbl">Тоо хэмжээ</label><input type="number" class="fi2" id="ap-qt" value="1" min="0"></div><div class="fgrp"><label class="flbl">Нэгж</label><select class="fi2" id="ap-un"><option>ш</option><option>л</option><option>м</option><option>кг</option><option>компл</option></select></div></div>
@@ -1091,7 +1218,7 @@ function openPartDetail(pid){const d2=d();const p=d2.parts.find(x=>x.id===pid);i
 <div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bgh" style="color:var(--red);border-color:var(--red)" onclick="deletePart('${p.id}')"><i class="ti ti-trash" style="font-size:11px"></i> Устгах</button><button class="bgh" onclick="closeModal()">Хаах</button></div>`);}
 function deletePart(pid){if(!confirm('Устгах уу?'))return;const d2=d();d2.parts=d2.parts.filter(p=>p.id!==pid);save();updBadges();closeModal();rPage(curPage);toast('Сэлбэг устгагдлаа');}
 
-function openAddCost(){const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-cash" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Зардал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+function openAddCost(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-cash" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Зардал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div class="fgrp"><label class="flbl">Ажил сонгох</label><select class="fi2" id="ac-task">${d2.tasks.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></div>
 <div class="fgrp"><label class="flbl">Зардлын дүн (₮)</label><input type="number" class="fi2" id="ac-amt" placeholder="0"></div>
 <div style="display:flex;gap:7px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bgh" onclick="closeModal()">Болих</button><button class="bpri" onclick="saveAddCost()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>`);}
@@ -1116,7 +1243,7 @@ ${rel.length>0?`<div style="font-size:11.5px;font-weight:700;margin-bottom:6px">
 function openQR(eid){const d2=d();const e=d2.equip.find(x=>x.id===eid);if(!e)return;const seed=eid.split('').reduce((a,c)=>a+c.charCodeAt(0),0);let cells='';for(let r=0;r<21;r++)for(let cl=0;cl<21;cl++){const on=(r<3&&cl<3)||(r<3&&cl>17)||(r>17&&cl<3)||(Math.sin(seed+r*7+cl*13)*100%2>0);cells+=`<div style="width:6px;height:6px;background:${on?'#1A2332':'#fff'};border-radius:${((r<3&&cl<3)||(r<3&&cl>17)||(r>17&&cl<3))?'1px':'0'}"></div>`;}
 openModal(`<div class="mh"><span class="mt2"><i class="ti ti-qrcode" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>QR код — ${e.name}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div><div style="text-align:center;padding:8px 0"><div style="display:inline-grid;grid-template-columns:repeat(21,6px);gap:1px;background:#fff;padding:10px;border:2px solid var(--bdr);border-radius:var(--rm);margin-bottom:10px">${cells}</div><div style="font-size:12.5px;font-weight:700;margin-bottom:2px">${e.name} — ${e.id}</div><div style="font-size:11px;color:var(--tx2)">${e.brand} ${e.model} · ${e.loc}</div></div><div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)"><button class="bpri" onclick="window.print()"><i class="ti ti-printer" style="font-size:11px"></i> Хэвлэх</button><button class="bgh" onclick="closeModal()">Хаах</button></div>`);}
 
-function openAddDailyEvent(){const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Өдрийн үйл явдал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+function openAddDailyEvent(){if(!isAdmin){toast('Засвар хийх эрх байхгүй. Админ горимд нэвтэрнэ үү.');return;}const d2=d();openModal(`<div class="mh"><span class="mt2"><i class="ti ti-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Өдрийн үйл явдал нэмэх</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div class="fgrp"><label class="flbl">Гарчиг *</label><input class="fi2" id="de-ti" placeholder="Үйл явдлын нэр"></div>
 <div class="frow"><div class="fgrp"><label class="flbl">Цаг</label><input type="time" class="fi2" id="de-tm" value="09:00"></div><div class="fgrp"><label class="flbl">Инженер</label><select class="fi2" id="de-en">${d2.engineers.map(e=>`<option value="${e.name}">${e.name}</option>`).join('')}</select></div></div>
 <div class="fgrp"><label class="flbl">Тайлбар</label><textarea class="fi2" id="de-ds" rows="2" style="resize:none" placeholder="Дэлгэрэнгүй тайлбар"></textarea></div>
@@ -1167,7 +1294,7 @@ function aPin(v){
         hideAll();
         document.getElementById('as').style.display='block';
         isAdmin=true; adminPinBuf=''; upAdots();
-        updBadges(); rPage(curPage);
+        updBadges(); rPage(curPage); syncAdminUI();
         toast('Админ горимд нэвтэрлээ ✓');
       } else {
         var err=document.getElementById('admin-err');
@@ -1213,6 +1340,7 @@ function showAdminScreen(){
 }
 function backToLanding(){
   hideAll(); show('landing');
+syncAdminUI();
 if(typeof updMobBadges==='function') updMobBadges();
   pinBuf=''; upDots();
   var ap=document.getElementById('admin-pwd'); if(ap) ap.value='';
@@ -1239,6 +1367,20 @@ function togglePwdVis(){
   if(inp.type==='password'){ inp.type='text'; if(ico) ico.className='ti ti-eye-off'; }
   else { inp.type='password'; if(ico) ico.className='ti ti-eye'; }
 }
+
+function saveWorkerPin(){
+  var v1=document.getElementById('new-wpin');
+  var v2=document.getElementById('new-wpin2');
+  if(!v1||!v2){toast('Алдаа гарлаа');return;}
+  var p1=v1.value.trim(), p2=v2.value.trim();
+  if(!p1){toast('ПИН оруулна уу!');return;}
+  if(!/^[0-9]{4}$/.test(p1)){toast('4 оронтой тоо оруулна уу!');return;}
+  if(p1!==p2){toast('ПИН таарсангүй!');return;}
+  curPin=p1;
+  save();
+  toast('Ажилтны ПИН амжилттай солигдлоо!');
+  v1.value=''; v2.value='';
+}
 function saveAdminPwd(){
   var v1=document.getElementById('new-apwd').value;
   var v2=document.getElementById('new-apwd2').value;
@@ -1247,15 +1389,16 @@ function saveAdminPwd(){
   if(v1!==v2){ toast('Нууц үг таарсангүй!'); return; }
   adminPwdHash=_hashPwd(v1);
   localStorage.setItem(ADMIN_PWD_KEY,adminPwdHash);
-  toast('Админ нууц үг амжилттай солигдлоо!');
-  rSettings(document.getElementById('content'));
+  toast('Админ ПИН амжилттай солигдлоо!');
+  var v1b=document.getElementById('new-apwd'); if(v1b) v1b.value='';
+  var v2b=document.getElementById('new-apwd2'); if(v2b) v2b.value='';
 }
 
 // Override doLogout to go to landing
 function doLogout(){
   document.getElementById('as').style.display='none';
   isAdmin=false; pinBuf=''; upDots();
-  hideAll(); show('landing');
+  hideAll(); show('landing'); syncAdminUI();
 }
 
 // Override pi() for landing flow
@@ -1466,7 +1609,26 @@ document.addEventListener('click',function(e){
   }
 });
 
+
+function syncAdminUI(){
+  // Hide/show admin-only buttons based on role
+  var addBtn=document.getElementById('topbar-add-btn');
+  var mobAddBtn=document.getElementById('mob-add-btn');
+  // Add task button - hide for workers
+  document.querySelectorAll('.admin-only').forEach(function(el){
+    el.style.display=isAdmin?'':'none';
+  });
+}
 // INIT
+// Restore user profile from CFG
+(function(){
+  var nm=CFG.userName||'А. Тэмүүжин';
+  var rl=CFG.userRole||'Ахлах менежер';
+  var av=nm.split(' ').map(function(x){return x.charAt(0);}).join('').substring(0,2).toUpperCase();
+  var snm=document.getElementById('sb-nm'); if(snm) snm.textContent=nm;
+  var srl=document.getElementById('sb-rl'); if(srl) srl.textContent=rl;
+  var sav=document.getElementById('sb-av'); if(sav) sav.textContent=av||'АТ';
+})();
 updBadges();
 rPage('dashboard');
 </script>
