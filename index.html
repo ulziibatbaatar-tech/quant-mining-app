@@ -881,7 +881,7 @@ function rPage(p){var c=document.getElementById('content');if(!c)return;c.classL
 // TABLE ROW
 function tRow(t){const pct2=autoCalcPct(t);const rc='trow'+(t.status==='done'?' dr':t.status==='overdue'?' orr':'');const cols='1.6fr .8fr .9fr .9fr .8fr .8fr 55px';return`<div class="${rc}" style="grid-template-columns:${cols}" onclick="openTaskDetail(${t.id})"><div><div class="tn">${t.name}</div><div class="te">${t.equip} · ${t.site}</div></div><div><span class="bdg ${PC[t.pri]}">${PL[t.pri]}</span></div><div><span class="sb2 ${SC[t.status]}"><span class="dot"></span>${SL[t.status]}</span></div><div style="font-size:11px">${t.eng}</div><div style="font-size:10px;color:var(--tx2)">${t.due}</div><div><div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;width:44px"><div style="height:100%;width:${pct2}%;background:${pct2>=100?'var(--grn)':pct2>=60?'var(--blue)':'var(--amb)'}"></div></div><div style="font-size:9px;color:var(--tx2);margin-top:1px">${pct2}%</div></div><div><button class="act" onclick="event.stopPropagation();openTaskDetail(${t.id})">Харах</button></div></div>`;}
 function tTable(list){if(!list.length)return`<div style="text-align:center;padding:32px;color:var(--tx3)"><i class="ti ti-mood-empty" style="font-size:26px;display:block;margin-bottom:7px"></i>Ажил олдсонгүй</div>`;const cols='1.6fr .8fr .9fr .9fr .8fr .8fr 55px';return`<div class="tbl"><div class="thd" style="grid-template-columns:${cols}"><div>Ажлын нэр</div><div>Ач холбогдол</div><div>Төлөв</div><div>Инженер</div><div>Дуусах</div><div>Явц%</div><div></div></div>${list.map(tRow).join('')}</div>`;}
-function toAlerts(equip){const today=new Date('2026-05-25');return equip.filter(e=>{const diff=Math.ceil((new Date(e.next)-today)/86400000);return diff<=7&&diff>=0;});}
+function toAlerts(equip){const today=new Date();today.setHours(0,0,0,0);return equip.filter(e=>{const diff=Math.ceil((new Date(e.next)-today)/86400000);return diff<=7&&diff>=0;});}
 // DASHBOARD
 function rDash(c,d2){const crit=d2.tasks.filter(t=>t.pri==='critical').length;const prog=d2.tasks.filter(t=>t.status==='progress').length;const done=d2.tasks.filter(t=>t.status==='done').length;const alts=toAlerts(d2.equip);const todayNorm=d2.normHistory[DAYS[0]]||{norm:CFG.normTarget,done:0};const normPct=Math.round(todayNorm.done/todayNorm.norm*100);const totalCost=d2.costs.reduce((a,b)=>a+b,0);c.innerHTML=`${alts.length>0?`<div class="alert"><i class="ti ti-alarm" style="font-size:15px;flex-shrink:0"></i><span><strong>${alts.map(e=>e.name).join(', ')}</strong> — 7 хоногийн дотор ТО хийх шаардлагатай!</span></div>`:''}
 <div class="srow"><div class="scard"><div class="slbl"><i class="ti ti-clipboard-list" style="font-size:11px"></i>Нийт ажил</div><div class="sval">${d2.tasks.length}</div><div class="snote cg">Энэ долоо хоног</div></div><div class="scard"><div class="slbl"><i class="ti ti-alert-triangle" style="font-size:11px"></i>Яаралтай</div><div class="sval cr">${crit}</div><div class="snote cr">Шууд анхаарах</div></div><div class="scard"><div class="slbl"><i class="ti ti-target" style="font-size:11px"></i>Өдрийн норм</div><div class="sval" style="color:${pctColor(normPct)}">${normPct}%</div><div style="height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:4px"><div style="height:100%;width:${normPct}%;background:${pctColor(normPct)}"></div></div></div><div class="scard"><div class="slbl"><i class="ti ti-cash" style="font-size:11px"></i>Нийт зардал</div><div class="sval ca">${fmt(totalCost)}</div><div class="snote ca">Энэ жил</div></div></div>
@@ -1043,6 +1043,88 @@ function clearChat(){if(confirm('Бүх чатыг устгах уу?')){CHAT=[]
 function viewImg(src){openModal(`<div class="mh"><span class="mt2">Зураг</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div><img src="${src}" style="width:100%;border-radius:8px;max-height:60vh;object-fit:contain">`);}
 
 // SETTINGS
+
+// ====== DATA EXPORT / IMPORT (Multi-device sync) ======
+function exportData(){
+  var exportObj = {
+    version: '4.0',
+    exported: new Date().toISOString(),
+    branch: curBranch,
+    DB: DB,
+    CFG: CFG,
+    CHAT: CHAT
+  };
+  var json = JSON.stringify(exportObj, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var d = new Date();
+  var fname = 'quant-mining-' + d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0') + '.json';
+  a.href = url; a.download = fname;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  toast('Өгөгдөл экспортлогдлоо: ' + fname);
+}
+
+function importData(){
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json,application/json';
+  inp.onchange = function(ev){
+    var file = ev.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e2){
+      try {
+        var obj = JSON.parse(e2.target.result);
+        if(!obj.DB || !obj.version){
+          alert('Файл буруу форматтай байна!');
+          return;
+        }
+        var html = '<div class="mh"><span class="mt2"><i class="ti ti-database-import" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Өгөгдөл импортлох</span>'
+          + '<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
+          + '<div style="background:var(--abg);border:1px solid #FDE68A;border-radius:var(--rm);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--atx)">'
+          + '<i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:5px"></i>'
+          + '<strong>Анхааруулга:</strong> Одоогийн бүх өгөгдөл устаж энэ файлаар солигдоно!</div>'
+          + '<div style="font-size:12.5px;color:var(--txt);margin-bottom:4px">Файл: <strong>' + file.name + '</strong></div>'
+          + '<div style="font-size:12px;color:var(--tx2);margin-bottom:12px">Экспортлосон: ' + (obj.exported ? new Date(obj.exported).toLocaleString('mn-MN') : '—') + '</div>'
+          + '<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">'
+          + '<button class="bgh" onclick="closeModal()">Болих</button>'
+          + '<button class="bpri" onclick="confirmImport(' + JSON.stringify(JSON.stringify(obj)).replace(/'/g,"\'") + ')">'
+          + '<i class="ti ti-check" style="font-size:11px"></i> Импортлох</button>'
+          + '</div>';
+        openModal(html);
+      } catch(err){
+        alert('JSON файл уншихад алдаа гарлаа: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  document.body.appendChild(inp); inp.click(); document.body.removeChild(inp);
+}
+
+function confirmImport(jsonStr){
+  try {
+    var obj = JSON.parse(jsonStr);
+    DB = obj.DB;
+    if(obj.CFG) CFG = obj.CFG;
+    if(obj.CHAT) CHAT = obj.CHAT;
+    save();
+    closeModal();
+    updBadges();
+    rPage(curPage);
+    // Restore user profile
+    var nm = CFG.userName||'А. Тэмүүжин';
+    var rl = CFG.userRole||'Ахлах менежер';
+    var av = nm.split(' ').map(function(x){return x.charAt(0);}).join('').substring(0,2).toUpperCase();
+    var snm=document.getElementById('sb-nm'); if(snm) snm.textContent=nm;
+    var srl=document.getElementById('sb-rl'); if(srl) srl.textContent=rl;
+    var sav=document.getElementById('sb-av'); if(sav) sav.textContent=av;
+    toast('Өгөгдөл амжилттай импортлогдлоо!');
+  } catch(err){
+    alert('Импортлоход алдаа гарлаа: ' + err.message);
+  }
+}
 function rSettings(c){
   pStep=1; newP1=''; newP2='';
   var d2=d();
@@ -1137,6 +1219,16 @@ function rSettings(c){
     +'</div>'
 
     // Data reset
+    
+    +'<div class="sts">'
+    +'<div class="sttl"><i class="ti ti-refresh" style="font-size:13px"></i>Өгөгдөл синк — Олон утас</div>'
+    +'<p style="font-size:11.5px;color:var(--tx2);margin-bottom:10px">Өгөгдлийг экспортолж өөр утасны аппд импортлоно. Ингэснээр бүх утасны дата ижил болно.</p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">'
+    +'<button class="bsv" onclick="exportData()"><i class="ti ti-download" style="font-size:12px"></i> Экспортлох (.json)</button>'
+    +'<button style="display:inline-flex;align-items:center;gap:5px;background:var(--gbg);color:var(--gtx);border:1px solid var(--grn);border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer" onclick="importData()"><i class="ti ti-upload" style="font-size:12px"></i> Импортлох (.json)</button>'
+    +'</div>'
+    +'<div style="font-size:11px;color:var(--tx3);background:var(--bg3);border-radius:var(--rm);padding:8px 10px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Жишээ: Утас А дээр өгөгдөл нэмсний дараа Экспортолж, Утас Б дээр Импортолно</div>'
+    +'</div>'
     +'<div class="sts">'
     +'<div class="sttl" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px;color:var(--red)"></i>Өгөгдөл удирдах</div>'
     +'<button style="display:inline-flex;align-items:center;gap:5px;background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:7px;padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer" onclick="resetDB()">'
@@ -1173,7 +1265,7 @@ function saveProfile(){
   }
   toast('Профайл хадгалагдлаа!');
 }
-function resetDB(){if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){localStorage.clear();DB=JSON.parse(JSON.stringify(DEF));CHAT=JSON.parse(JSON.stringify(CHATDEF));CFG={notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5};curPin='0000';toast('Өгөгдөл шинэчлэгдлээ');updBadges();rPage(curPage);}}
+function resetDB(){if(confirm('Бүх өгөгдлийг устгаж анхны хувилбарт буцаах уу?')){localStorage.clear();DB=JSON.parse(JSON.stringify(DEF));DB.taskLog={};CHAT=JSON.parse(JSON.stringify(CHATDEF));CFG={notifications:true,autoCalc:true,companyName:"Квант Майнинг ХХК",currency:"₮",normTarget:5,userName:'А. Тэмүүжин',userRole:'Ахлах менежер'};curPin='0000';toast('Өгөгдөл шинэчлэгдлээ');updBadges();rPage(curPage);}}
 
 // MODALS
 function openModal(html){document.getElementById('mbox').innerHTML=html;var _ma=document.getElementById('modal');if(_ma)_ma.classList.add('op');}
@@ -1338,7 +1430,8 @@ function openEmpEdit(){const d2=d();openModal(`<div class="mh"><span class="mt2"
 ${d2.engineers.map((e,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr)"><div class="av" style="background:${e.av};color:${e.at};width:28px;height:28px">${e.name.charAt(0)}</div><div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px"><input class="fi2" id="en-nm-${i}" value="${e.name}" placeholder="Нэр"><input class="fi2" id="en-ph-${i}" value="${e.phone}" placeholder="Утас"><input class="fi2" id="en-sp-${i}" value="${e.spec}" placeholder="Мэргэшил" style="grid-column:span 2"><div style="display:flex;align-items:center;gap:6px"><label class="flbl" style="white-space:nowrap;margin:0">Норм/сар:</label><input class="fi2" type="number" id="en-nr-${i}" value="${e.norm||5}" style="max-width:70px"></div></div></div>`).join('')}
 <div style="display:flex;gap:7px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr);margin-top:6px"><button class="bgh" onclick="closeModal()">Болих</button><button class="bpri" onclick="saveEmps()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button></div>`);}
 
-function addEngineer(){
+function addEngineer(){if(!isAdmin){toast('Засвар хийх эрх байхгүй.');return;}
+  
   var d2=d();
   var html='<div class="mh"><span class="mt2"><i class="ti ti-user-plus" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Шинэ инженер нэмэх</span>'
     +'<button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>'
@@ -1384,14 +1477,16 @@ function saveAddEngineer(){
   toast('Шинэ инженер нэмэгдлээ!');
 }
 
-function deleteEngineer(eid){
+function deleteEngineer(eid){if(!isAdmin){toast('Засвар хийх эрх байхгүй.');return;}
+  
   if(!confirm('Энэ инженерийг устгах уу?')) return;
   var d2=d();
   d2.engineers=d2.engineers.filter(function(e){return e.id!==eid;});
   save(); rPage(curPage);
   toast('Инженер устгагдлаа');
 }
-function saveEmps(){const d2=d();d2.engineers.forEach((e,i)=>{const n=document.getElementById('en-nm-'+i),p=document.getElementById('en-ph-'+i),s=document.getElementById('en-sp-'+i),nr=document.getElementById('en-nr-'+i);if(n)e.name=n.value;if(p)e.phone=p.value;if(s)e.spec=s.value;if(nr)e.norm=parseInt(nr.value)||5;});save();closeModal();rPage(curPage);toast('Инженерийн мэдээлэл хадгалагдлаа!');}
+function saveEmps(){if(!isAdmin){toast('Засвар хийх эрх байхгүй.');return;}
+  const d2=d();d2.engineers.forEach((e,i)=>{const n=document.getElementById('en-nm-'+i),p=document.getElementById('en-ph-'+i),s=document.getElementById('en-sp-'+i),nr=document.getElementById('en-nr-'+i);if(n)e.name=n.value;if(p)e.phone=p.value;if(s)e.spec=s.value;if(nr)e.norm=parseInt(nr.value)||5;});save();closeModal();rPage(curPage);toast('Инженерийн мэдээлэл хадгалагдлаа!');}
 
 function openEqDetail(eid){const d2=d();const e=d2.equip.find(x=>x.id===eid);if(!e)return;const rel=d2.tasks.filter(t=>t.equip.includes(eid));openModal(`<div class="mh"><span class="mt2"><i class="ti ${e.icon}" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>${e.name} — ${e.id}</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:11px">
@@ -1788,7 +1883,7 @@ function syncAdminUI(){
 function autoCheckNotifs(){
   ['UB','BG'].forEach(function(br){
     var d2=DB[br];
-    var today=new Date('2026-05-25');
+    var today=new Date();today.setHours(0,0,0,0);
     d2.equip.forEach(function(eq){
       var diff=Math.ceil((new Date(eq.next)-today)/86400000);
       if(diff<=7 && diff>=0){
